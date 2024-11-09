@@ -12,6 +12,7 @@ public class ConsoleApp {
                     Welcome! Please log in:
                     1. Log in as User
                     2. Log in as Admin
+                    3. Sign up as User
                     
                     0. Exit Application
                     """);
