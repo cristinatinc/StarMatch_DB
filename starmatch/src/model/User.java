@@ -1,19 +1,20 @@
 package model;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class User extends Person {
 
     private String email;
     private String password;
-    private List<Friend> friends;
+    private List<User> friends;
 
-    public User(int id, String name, Date birthDate, Integer birthTime, String birthPlace, String email, String password, List<Friend> friends) {
+    public User(int id, String name, LocalDate birthDate, Integer birthTime, String birthPlace, String email, String password) {
         super(id, name, birthDate, birthTime, birthPlace);
         this.email = email;
         this.password = password;
-        this.friends = friends;
+        this.friends = new ArrayList<User>();
     }
 
     public String getEmail() {
@@ -32,11 +33,11 @@ public class User extends Person {
         this.password = password;
     }
 
-    public List<Friend> getFriends() {
+    public List<User> getFriends() {
         return friends;
     }
 
-    public void setFriends(List<Friend> friends) {
+    public void setFriends(List<User> friends) {
         this.friends = friends;
     }
 
