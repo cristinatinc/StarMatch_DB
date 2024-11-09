@@ -35,15 +35,9 @@ public class ConsoleApp {
                     System.out.println("Exiting application. Goodbye!");
                     continueLoop = false;
                 }
-                case "1" -> {
-                    userLoginMenu(scanner);
-                }
-                case "2" -> {
-                    adminLoginMenu(scanner);
-                }
-                case "3" -> {
-                    userSignUpMenu(scanner);
-                }
+                case "1" -> userLoginMenu(scanner);
+                case "2" -> adminLoginMenu(scanner);
+                case "3" -> userSignUpMenu(scanner);
                 default -> System.out.println("Invalid option. Please try again.");
             }
         }
