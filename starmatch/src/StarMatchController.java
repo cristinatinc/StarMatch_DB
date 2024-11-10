@@ -24,6 +24,12 @@ public class StarMatchController {
 
     public void addNewAdmin(String name, String email, String password){
         starMatchService.createAdmin(name, email, password);
+        System.out.println("Admin added successfully!");
+    }
+
+    public void removeAdmin(Integer adminID){
+        starMatchService.removeAdmin(adminID);
+        System.out.println("Removed admin with ID " + adminID);
     }
 
     public void viewAdmins(){

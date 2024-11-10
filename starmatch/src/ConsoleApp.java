@@ -179,7 +179,7 @@ public class ConsoleApp {
                 case "0" -> adminLoop = false;
                 case "1" -> starMatchController.viewAdmins();
                 case "2" -> addNewAdmin(scanner);
-                case "3" -> System.out.println("deleting admin...");
+                case "3" -> removeAdmin(scanner);
                 case "4" -> System.out.println("update existing admin...");
                 default -> System.out.println("Invalid option. Please try again.");
             }
@@ -196,7 +196,15 @@ public class ConsoleApp {
         String password = scanner.nextLine();
 
         starMatchController.addNewAdmin(name, email, password);
-        System.out.println("Admin added successfully!");
+    }
+
+    private void removeAdmin(Scanner scanner) {
+        System.out.println("-- Remove Admin --");
+        starMatchController.viewAdmins();
+        System.out.print("Admin ID: ");
+        String adminID = scanner.nextLine();
+
+        starMatchController.removeAdmin(Integer.valueOf(adminID));
     }
 
     private void viewNatalChart(String userEmail) {

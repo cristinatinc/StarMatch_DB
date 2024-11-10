@@ -37,6 +37,10 @@ public class StarMatchService {
         adminRepository.create(newAdmin);
     }
 
+    public void removeAdmin(Integer adminId){
+        adminRepository.delete(adminId);
+    }
+
     public int getMaxUserId() {
         return userRepository.getAll().stream()
                 .mapToInt(User::getId)
