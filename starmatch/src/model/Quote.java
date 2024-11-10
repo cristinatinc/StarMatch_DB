@@ -5,7 +5,7 @@ public class Quote implements HasId {
     private String quoteText;
     private Integer id;
 
-    public Quote(Element element, String quoteText, Integer id) {
+    public Quote(Integer id, Element element, String quoteText) {
         this.element = element;
         this.quoteText = quoteText;
         this.id = id;
