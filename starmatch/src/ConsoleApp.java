@@ -4,6 +4,7 @@ import repository.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleApp {
@@ -325,21 +326,25 @@ public class ConsoleApp {
         User user=starMatchController.viewUserProfile(userEmail);
         System.out.println("""
                 User Profile:
-                Name: """ + user.getName() + """
+                Name:""" + user.getName() + """
                 
-                Birthdate: """ + user.getBirthDate() +
+                Birthdate:""" + user.getBirthDate() +
                 """
                 
-                Birthtime: """ + user.getBirthTime() +
+                Birthtime:""" + user.getBirthTime() +
                 """
                 
-                Birthplace: """ + user.getBirthPlace() +
+                Birthplace:""" + user.getBirthPlace() +
                 """
                 
-                Email: """ + user.getEmail() +
+                Email:""" + user.getEmail() +
                 """
                 
-                Password: """ + user.getPassword());
+                Password:""" + user.getPassword());
+    }
+
+    private void viewPersonalityTraits(String userEmail){
+        ;
     }
 
     public static void main(String[] args) {
@@ -347,8 +352,9 @@ public class ConsoleApp {
         Repository<Admin> adminRepository = createInMemoryAdminRepository();
         Repository<StarSign> signRepository = createInMemoryStarSignRepository();
         Repository<Quote> quoteRepository = createInMemoryQuoteRepository();
+        Repository<Trait> traitRepository = createInMemoryTraitRepository();
 
-        StarMatchService starMatchService = new StarMatchService(userRepository, adminRepository,signRepository, quoteRepository);
+        StarMatchService starMatchService = new StarMatchService(userRepository, adminRepository,signRepository, quoteRepository, traitRepository);
         StarMatchController starMatchController = new StarMatchController(starMatchService);
 
         ConsoleApp consoleApp = new ConsoleApp(starMatchController);
@@ -373,8 +379,52 @@ public class ConsoleApp {
 
     private static Repository<StarSign> createInMemoryStarSignRepository() {
         Repository<StarSign> signRepository = new InMemoryRepository<>();
-        //signRepository.create(new StarSign());
+        Repository<Trait> traitRepository = createInMemoryTraitRepository();
+
+        Element fire = Element.Fire;
+        Element water = Element.Water;
+        Element air = Element.Air;
+        Element earth = Element.Earth;
+        List<Trait> fireTraits=traitRepository.getAll().stream().filter(trait -> trait.getElement()==Element.Fire).toList();
+        List<Trait> waterTraits=traitRepository.getAll().stream().filter(trait -> trait.getElement()==Element.Water).toList();
+        List<Trait> airTraits=traitRepository.getAll().stream().filter(trait -> trait.getElement()==Element.Air).toList();
+        List<Trait> earthTraits=traitRepository.getAll().stream().filter(trait -> trait.getElement()==Element.Earth).toList();
+
+        signRepository.create(new StarSign("Aries",fire,fireTraits,1));
+        signRepository.create(new StarSign("Taurus",earth,earthTraits,2));
+        signRepository.create(new StarSign("Gemini",air,airTraits,3));
+        signRepository.create(new StarSign("Cancer",water,waterTraits,4));
+        signRepository.create(new StarSign("Leo",fire,fireTraits,5));
+        signRepository.create(new StarSign("Virgo",earth,earthTraits,6));
+        signRepository.create(new StarSign("Libra",air,airTraits,7));
+        signRepository.create(new StarSign("Scorpio",water,waterTraits,8));
+        signRepository.create(new StarSign("Sagittarius",fire,fireTraits,9));
+        signRepository.create(new StarSign("Capricorn",earth,earthTraits,10));
+        signRepository.create(new StarSign("Aquarius",air,airTraits,11));
+        signRepository.create(new StarSign("Pisces",water,waterTraits,12));
         return signRepository;
+    }
+
+    private static Repository<Trait> createInMemoryTraitRepository(){
+        Repository<Trait> traitRepository = new InMemoryRepository<>();
+        Element fire = Element.Fire;
+        Element water = Element.Water;
+        Element air = Element.Air;
+        Element earth = Element.Earth;
+
+        traitRepository.create(new Trait(fire,"passionate",1));
+        traitRepository.create(new Trait(fire,"playful",2));
+        traitRepository.create(new Trait(fire,"energized",3));
+        traitRepository.create(new Trait(water,"emotional",4));
+        traitRepository.create(new Trait(water,"intuitive",5));
+        traitRepository.create(new Trait(water,"nurturing",6));
+        traitRepository.create(new Trait(air,"adventurous",7));
+        traitRepository.create(new Trait(air,"curious",8));
+        traitRepository.create(new Trait(air,"sociable",9));
+        traitRepository.create(new Trait(earth,"stable",10));
+        traitRepository.create(new Trait(earth,"pragmatic",11));
+        traitRepository.create(new Trait(earth,"analytic",12));
+        return traitRepository;
     }
 
     private static Repository<Quote> createInMemoryQuoteRepository() {
