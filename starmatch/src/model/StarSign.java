@@ -8,10 +8,10 @@ public class StarSign implements HasId{
     private Element element;
     private List<Trait> traits;
 
-    public StarSign(List<Trait> traits, Element element, String starName, Integer id) {
-        this.traits = traits;
-        this.element = element;
+    public StarSign(String starName, Element element, List<Trait> traits, Integer id) {
         this.starName = starName;
+        this.element = element;
+        this.traits = traits;
         this.id = id;
     }
 
