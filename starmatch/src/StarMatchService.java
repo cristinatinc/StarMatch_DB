@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 public class StarMatchService {
     private final Repository<User> userRepository;
@@ -97,7 +99,6 @@ public class StarMatchService {
 
     public List<Quote> getQuotes() { return quoteRepository.getAll();}
 
-
     public User getUserByEmail(String email) {
         return userRepository.getAll().stream()
                 .filter(user -> user.getEmail().equals(email))
@@ -169,5 +170,19 @@ public class StarMatchService {
         return zodiacSigns[index];
     }
 
+    public List<String> getPersonalityTraits(User user){
+        NatalChart chart=getNatalChart(user);
+        StarSign sunSign=chart.getPlanets().getFirst().getSign();
+        return sunSign.getTraits().stream()
+                .map(Trait::getTraitName)
+                .collect(Collectors.toList());
+    }
 
+    public String getPersonalizedQuote(User user){
+        NatalChart chart=getNatalChart(user);
+        Element element=chart.getPlanets().getFirst().getSign().getElement();
+        List<String> quotes=quoteRepository.getAll().stream().filter(quote -> quote.getElement().equals(element)).map(Quote::getQuoteText).toList();
+        Random random=new Random();
+        return quotes.get(random.nextInt(quotes.size()));
+    }
 }

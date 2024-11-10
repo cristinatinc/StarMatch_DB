@@ -104,7 +104,7 @@ public class ConsoleApp {
                     1. View Profile
                     2. View Natal Chart
                     3. View Personality Traits
-                    4. View Daily Quote
+                    4. View Personalized Quote
                     5. Manage Friends
                     6. Check Compatibility
                     
@@ -120,8 +120,8 @@ public class ConsoleApp {
                 }
                 case "1" -> viewUserProfile(userEmail);
                 case "2" -> viewNatalChart(userEmail);
-                case "3" -> System.out.println("Displaying personality traits...");
-                case "4" -> System.out.println("Displaying daily quote...");
+                case "3" -> viewPersonalityTraits(userEmail);
+                case "4" -> viewPersonalizedQuote(userEmail);
                 case "5" -> System.out.println("Managing friends...");
                 case "6" -> System.out.println("Checking compatibility...");
                 default -> System.out.println("Invalid option. Please try again.");
@@ -344,7 +344,14 @@ public class ConsoleApp {
     }
 
     private void viewPersonalityTraits(String userEmail){
-        ;
+        List<String> traits=starMatchController.viewPersonalityTraits(userEmail);
+        System.out.println("Your personality traits:");
+        traits.forEach(System.out::println);
+    }
+
+    private void viewPersonalizedQuote(String userEmail) {
+        System.out.println("Your personalized quote:");
+        System.out.println(starMatchController.getPersonalizedQuote(userEmail));
     }
 
     public static void main(String[] args) {

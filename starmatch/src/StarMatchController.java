@@ -3,6 +3,7 @@ import model.User;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public class StarMatchController {
 
@@ -88,6 +89,14 @@ public class StarMatchController {
         return starMatchService.getUserByEmail(userEmail);
     }
 
+    public List<String> viewPersonalityTraits(String userEmail){
+        User user = starMatchService.getUserByEmail(userEmail);
+        return starMatchService.getPersonalityTraits(user);
+    }
 
+    public String getPersonalizedQuote(String userEmail){
+        User user = starMatchService.getUserByEmail(userEmail);
+        return starMatchService.getPersonalizedQuote(user);
+    }
 
 }
