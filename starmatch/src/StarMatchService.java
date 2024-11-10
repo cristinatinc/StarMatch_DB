@@ -1,10 +1,9 @@
-import model.Admin;
-import model.NatalChart;
-import model.User;
+import model.*;
 import repository.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StarMatchService {
@@ -47,5 +46,80 @@ public class StarMatchService {
 
     public List<User> getUsers() { return userRepository.getAll();}
 
-    //public NatalChart getNatalChart(LocalDate birthDate, LocalTime birthTime, String birthPlace) {}
+    public NatalChart getNatalChart(LocalDate birthDate, LocalTime birthTime) {
+        List<Planet> planets = new ArrayList<>();
+        String sunSign=calculateSunSign(birthDate);
+        String moonSign=calculateMoonSign(birthDate);
+        String risingSign=calculateRisingSign(birthTime);
+        planets.add(new Planet("Sun", new StarSign(null,null,sunSign,1),1));
+        planets.add(new Planet("Moon", new StarSign(null,null,moonSign,2),2));
+        planets.add(new Planet("Rising", new StarSign(null,null,risingSign,3),3));
+        return new NatalChart(planets);
+    }
+
+    private String calculateSunSign(LocalDate birthDate) {
+        int day= birthDate.getDayOfMonth();
+        switch (birthDate.getMonth()) {
+            case MARCH -> {
+                return (day<21) ? "Pisces" : "Aries";
+            }
+            case APRIL -> {
+                return (day<20) ? "Aries" : "Taurus";
+            }
+            case MAY -> {
+                return (day<21) ? "Taurus" : "Gemini";
+            }
+            case JUNE -> {
+                return (day<21) ? "Gemini" : "Cancer";
+            }
+            case JULY -> {
+                return (day<23) ? "Cancer" : "Leo";
+            }
+            case AUGUST -> {
+                return (day<23) ? "Leo" : "Virgo";
+            }
+            case SEPTEMBER -> {
+                return (day<23) ? "Virgo" : "Libra";
+            }
+            case OCTOBER -> {
+                return (day<23) ? "Libra" : "Scorpio";
+            }
+            case NOVEMBER -> {
+                return (day<22) ? "Scorpio" : "Sagittarius";
+            }
+            case DECEMBER -> {
+                return (day<22) ? "Sagittarius" : "Capricorn";
+            }
+            case JANUARY -> {
+                return (day<20) ? "Capricorn" : "Aquarius";
+            }
+            case FEBRUARY -> {
+                return (day<19) ? "Aquarius" : "Pisces";
+            }
+            default -> {
+                return "Unknown";
+            }
+        }
+    }
+
+    private String calculateMoonSign(LocalDate birthDate){
+        long daysSinceFixedDate = java.time.temporal.ChronoUnit.DAYS.between(
+                LocalDate.of(2000, 1, 1), birthDate);
+        int moonIndex = (int) ((daysSinceFixedDate / 2.5) % 12);
+        return getZodiacSignFromIndex(moonIndex);
+    }
+
+    private String calculateRisingSign(LocalTime birthTime) {
+        int hour = birthTime.getHour();
+        int risingIndex = (hour / 2) % 12;
+        return getZodiacSignFromIndex(risingIndex);
+    }
+
+    private String getZodiacSignFromIndex(int index) {
+        String[] zodiacSigns = {
+                "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+                "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
+        };
+        return zodiacSigns[index];
+    }
 }

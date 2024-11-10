@@ -1,4 +1,5 @@
 import model.Admin;
+import model.NatalChart;
 import model.User;
 import repository.InMemoryRepository;
 import repository.Repository;
@@ -119,7 +120,7 @@ public class ConsoleApp {
                     userLoop = false;
                 }
                 case "1" -> System.out.println("Displaying profile...");
-                case "2" -> System.out.println("Displaying natal chart...");
+                case "2" -> viewNatalChart(scanner);
                 case "3" -> System.out.println("Displaying personality traits...");
                 case "4" -> System.out.println("Displaying daily quote...");
                 case "5" -> System.out.println("Managing friends...");
@@ -195,6 +196,21 @@ public class ConsoleApp {
 
         starMatchController.addNewAdmin(name, email, password);
         System.out.println("Admin added successfully!");
+    }
+
+    private void viewNatalChart(Scanner scanner) {
+        System.out.print("Enter birth date (yyyy-MM-dd): ");
+        String birthDateString = scanner.nextLine();
+        LocalDate birthDate = LocalDate.parse(birthDateString);
+
+        System.out.print("Enter birth time (HH:mm): ");
+        String birthTimeString = scanner.nextLine();
+        LocalTime birthTime = LocalTime.parse(birthTimeString);
+
+        NatalChart natalChart = starMatchController.viewNatalChart(birthDate, birthTime);
+
+        System.out.println("Natal Chart:");
+        natalChart.getPlanets().forEach(planet -> System.out.println(planet.getPlanetName() + ": " +planet.getSign().getStarName()));
     }
 
     public static void main(String[] args) {

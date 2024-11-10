@@ -1,3 +1,5 @@
+import model.NatalChart;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -35,7 +37,7 @@ public class StarMatchController {
         System.out.println(output);
     }
 
-    public void viewNatalChart(){
-        StringBuilder output = new StringBuilder("Natal Chart:\n");
+    public NatalChart viewNatalChart(LocalDate birthDate, LocalTime birthTime){
+        return starMatchService.getNatalChart(birthDate,birthTime);
     }
 }
