@@ -39,7 +39,8 @@ public class Quote implements HasId {
     @Override
     public String toString() {
         return "Quote{" +
-                "element=" + element +
+                "id=" + id +
+                ", element=" + element +
                 ", quoteText='" + quoteText + '\'' +
                 '}';
     }
