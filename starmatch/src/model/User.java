@@ -45,13 +45,15 @@ public class User extends Person {
     @Override
     public String toString() {
         return "User{" +
-                "email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", friends=" + friends +
-                ", id=" + id +
+                "id=" + id +
                 ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", birthDate=" + birthDate +
                 ", birthTime=" + birthTime +
+                ", birthPlace='" + birthPlace + '\'' +
+                ", friends=" + friends +
                 '}';
     }
+
 }
