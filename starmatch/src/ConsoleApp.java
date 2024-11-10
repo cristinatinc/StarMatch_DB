@@ -55,7 +55,7 @@ public class ConsoleApp {
 
         if (starMatchController.handleUserLogin(email, password)) {
             System.out.println("Login successful! Welcome, " + email);
-            userMenu(scanner);
+            userMenu(scanner, email);
         } else {
             System.out.println("Invalid credentials. Please try again.");
         }
@@ -94,10 +94,10 @@ public class ConsoleApp {
         starMatchController.signUpNewUser(name, LocalDate.parse(dateOfBirth), LocalTime.parse(timeOfBirth), placeOfBirth, email, password);
 
         System.out.println("Sign-up successful! Welcome, " + name);
-        userMenu(scanner);
+        userMenu(scanner, email);
     }
 
-    private void userMenu(Scanner scanner) {
+    private void userMenu(Scanner scanner, String userEmail) {
         boolean userLoop = true;
         while (userLoop) {
             System.out.print("""
@@ -120,7 +120,7 @@ public class ConsoleApp {
                     userLoop = false;
                 }
                 case "1" -> System.out.println("Displaying profile...");
-                case "2" -> viewNatalChart(scanner);
+                case "2" -> viewNatalChart(userEmail);
                 case "3" -> System.out.println("Displaying personality traits...");
                 case "4" -> System.out.println("Displaying daily quote...");
                 case "5" -> System.out.println("Managing friends...");
@@ -198,19 +198,16 @@ public class ConsoleApp {
         System.out.println("Admin added successfully!");
     }
 
-    private void viewNatalChart(Scanner scanner) {
-        System.out.print("Enter birth date (yyyy-MM-dd): ");
-        String birthDateString = scanner.nextLine();
-        LocalDate birthDate = LocalDate.parse(birthDateString);
-
-        System.out.print("Enter birth time (HH:mm): ");
-        String birthTimeString = scanner.nextLine();
-        LocalTime birthTime = LocalTime.parse(birthTimeString);
-
-        NatalChart natalChart = starMatchController.viewNatalChart(birthDate, birthTime);
-
-        System.out.println("Natal Chart:");
-        natalChart.getPlanets().forEach(planet -> System.out.println(planet.getPlanetName() + ": " +planet.getSign().getStarName()));
+    private void viewNatalChart(String userEmail) {
+        NatalChart natalChart = starMatchController.viewNatalChart(userEmail);
+        if (natalChart != null) {
+            System.out.println("Natal Chart:");
+            natalChart.getPlanets().forEach(planet ->
+                    System.out.println(planet.getPlanetName() + ": " + planet.getSign().getStarName())
+            );
+        } else {
+            System.out.println("No natal chart available for this user.");
+        }
     }
 
     public static void main(String[] args) {

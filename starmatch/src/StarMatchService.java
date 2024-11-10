@@ -46,8 +46,17 @@ public class StarMatchService {
 
     public List<User> getUsers() { return userRepository.getAll();}
 
-    public NatalChart getNatalChart(LocalDate birthDate, LocalTime birthTime) {
+    public User getUserByEmail(String email) {
+        return userRepository.getAll().stream()
+                .filter(user -> user.getEmail().equals(email))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public NatalChart getNatalChart(User user) {
         List<Planet> planets = new ArrayList<>();
+        LocalDate birthDate=user.getBirthDate();
+        LocalTime birthTime=user.getBirthTime();
         String sunSign=calculateSunSign(birthDate);
         String moonSign=calculateMoonSign(birthDate);
         String risingSign=calculateRisingSign(birthTime);

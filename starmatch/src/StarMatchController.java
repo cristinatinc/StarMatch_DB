@@ -1,4 +1,5 @@
 import model.NatalChart;
+import model.User;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -37,7 +38,13 @@ public class StarMatchController {
         System.out.println(output);
     }
 
-    public NatalChart viewNatalChart(LocalDate birthDate, LocalTime birthTime){
-        return starMatchService.getNatalChart(birthDate,birthTime);
+    public NatalChart viewNatalChart(String userEmail){
+        User user = starMatchService.getUserByEmail(userEmail); // Implement getUserByEmail in service
+        if (user != null) {
+            return starMatchService.getNatalChart(user);
+        } else {
+            System.out.println("User not found.");
+            return null;
+        }
     }
 }
