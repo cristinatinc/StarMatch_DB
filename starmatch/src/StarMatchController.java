@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class StarMatchController {
 
@@ -14,7 +15,7 @@ public class StarMatchController {
         return starMatchService.validateAdminLogin(email, password);
     }
 
-    public void signUpNewUser(String name, LocalDate birthDate, Integer birthTime, String birthPlace, String email, String password) {
+    public void signUpNewUser(String name, LocalDate birthDate, LocalTime birthTime, String birthPlace, String email, String password) {
         starMatchService.createUser(name, birthDate, birthTime, birthPlace, email, password);
     }
 
@@ -26,5 +27,15 @@ public class StarMatchController {
         StringBuilder output = new StringBuilder("Admins of the app:\n");
         starMatchService.getAdmins().forEach(course -> output.append(course.toString()).append("\n"));
         System.out.println(output);
+    }
+
+    public void viewUserProfile(){
+        StringBuilder output = new StringBuilder("User profile:\n");
+        starMatchService.getUsers().forEach(course -> output.append(course.toString()).append("\n"));
+        System.out.println(output);
+    }
+
+    public void viewNatalChart(){
+        StringBuilder output = new StringBuilder("Natal Chart:\n");
     }
 }

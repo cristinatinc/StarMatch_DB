@@ -1,15 +1,16 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public abstract class Person implements HasId{
     protected int id;
     protected String name;
     protected LocalDate birthDate;
-    protected Integer birthTime;
+    protected LocalTime birthTime;
     private String birthPlace;
 
-    protected Person(int id, String name, LocalDate birthDate, Integer birthTime, String birthPlace) {
+    protected Person(int id, String name, LocalDate birthDate, LocalTime birthTime, String birthPlace) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
@@ -42,11 +43,11 @@ public abstract class Person implements HasId{
         this.birthDate = birthDate;
     }
 
-    public Integer getBirthTime() {
+    public LocalTime getBirthTime() {
         return birthTime;
     }
 
-    public void setBirthTime(Integer birthTime) {
+    public void setBirthTime(LocalTime birthTime) {
         this.birthTime = birthTime;
     }
 

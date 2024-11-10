@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ public class User extends Person {
     private String password;
     private List<User> friends;
 
-    public User(int id, String name, LocalDate birthDate, Integer birthTime, String birthPlace, String email, String password) {
+    public User(int id, String name, LocalDate birthDate, LocalTime birthTime, String birthPlace, String email, String password) {
         super(id, name, birthDate, birthTime, birthPlace);
         this.email = email;
         this.password = password;

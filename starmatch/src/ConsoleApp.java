@@ -4,6 +4,7 @@ import repository.InMemoryRepository;
 import repository.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Scanner;
 
 public class ConsoleApp {
@@ -84,12 +85,12 @@ public class ConsoleApp {
         String password = scanner.nextLine();
         System.out.print("Birthdate (yyyy-MM-dd): ");
         String dateOfBirth = scanner.nextLine();
-        System.out.print("Time of birth: ");
+        System.out.print("Time of birth (HH:mm): ");
         String timeOfBirth = scanner.nextLine();
         System.out.print("Place of birth: ");
         String placeOfBirth = scanner.nextLine();
 
-        starMatchController.signUpNewUser(name, LocalDate.parse(dateOfBirth), Integer.valueOf(timeOfBirth), placeOfBirth, email, password);
+        starMatchController.signUpNewUser(name, LocalDate.parse(dateOfBirth), LocalTime.parse(timeOfBirth), placeOfBirth, email, password);
 
         System.out.println("Sign-up successful! Welcome, " + name);
         userMenu(scanner);
@@ -117,7 +118,7 @@ public class ConsoleApp {
                     System.out.println("Logging out...");
                     userLoop = false;
                 }
-                case "1" -> System.out.println("Displaying user profile...");
+                case "1" -> System.out.println("Displaying profile...");
                 case "2" -> System.out.println("Displaying natal chart...");
                 case "3" -> System.out.println("Displaying personality traits...");
                 case "4" -> System.out.println("Displaying daily quote...");
@@ -210,10 +211,10 @@ public class ConsoleApp {
 
     private static Repository<User> createInMemoryUserRepository() {
         Repository<User> userRepository = new InMemoryRepository<>();
-        userRepository.create(new User(1, "Amna", LocalDate.of(2000, 3, 12), 9, "Romania", "amna@gmail.com", "parola"));
-        userRepository.create(new User(2, "Florian", LocalDate.of(2007, 7, 24), 10, "Romania", "florinel@gmail.com", "0987"));
-        userRepository.create(new User(3, "Briana Gheorghe", LocalDate.of(2004, 1, 3), 22, "USA", "brianaagheorghe@yahoo.com", "bribri"));
-        userRepository.create(new User(4, "sore marian", LocalDate.of(1990, 9, 10), 6, "Germania", "soremarian@gmail.com", "sore1"));
+        userRepository.create(new User(1, "Amna", LocalDate.of(2000, 3, 12), LocalTime.of(9,0), "Romania", "amna@gmail.com", "parola"));
+        userRepository.create(new User(2, "Florian", LocalDate.of(2007, 7, 24), LocalTime.of(10,0), "Romania", "florinel@gmail.com", "0987"));
+        userRepository.create(new User(3, "Briana Gheorghe", LocalDate.of(2004, 1, 3), LocalTime.of(22,12), "USA", "brianaagheorghe@yahoo.com", "bribri"));
+        userRepository.create(new User(4, "sore marian", LocalDate.of(1990, 9, 10), LocalTime.of(6,23), "Germania", "soremarian@gmail.com", "sore1"));
         return userRepository;
     }
 

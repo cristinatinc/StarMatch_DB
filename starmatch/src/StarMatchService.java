@@ -1,8 +1,10 @@
 import model.Admin;
+import model.NatalChart;
 import model.User;
 import repository.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public class StarMatchService {
@@ -24,7 +26,7 @@ public class StarMatchService {
                 .anyMatch(admin -> admin.getEmail().equals(email) && admin.getPassword().equals(password));
     }
 
-    public void createUser(String name, LocalDate birthDate, Integer birthTime, String birthPlace, String email, String password) {
+    public void createUser(String name, LocalDate birthDate, LocalTime birthTime, String birthPlace, String email, String password) {
         User newUser = new User(getMaxUserId() + 1, name, birthDate, birthTime, birthPlace, email, password);
         userRepository.create(newUser);
     }
@@ -45,4 +47,5 @@ public class StarMatchService {
 
     public List<User> getUsers() { return userRepository.getAll();}
 
+    //public NatalChart getNatalChart(LocalDate birthDate, LocalTime birthTime, String birthPlace) {}
 }
