@@ -1,5 +1,6 @@
 import model.Admin;
 import model.NatalChart;
+import model.StarSign;
 import model.User;
 import repository.InMemoryRepository;
 import repository.Repository;
@@ -234,14 +235,14 @@ public class ConsoleApp {
     public static void main(String[] args) {
         Repository<User> userRepository = createInMemoryUserRepository();
         Repository<Admin> adminRepository = createInMemoryAdminRepository();
+        Repository<StarSign> signRepository = createInMemoryStarSignRepository();
 
-        StarMatchService starMatchService = new StarMatchService(userRepository, adminRepository);
+        StarMatchService starMatchService = new StarMatchService(userRepository, adminRepository,signRepository);
         StarMatchController starMatchController = new StarMatchController(starMatchService);
 
         ConsoleApp consoleApp = new ConsoleApp(starMatchController);
         consoleApp.start();
     }
-
 
     private static Repository<User> createInMemoryUserRepository() {
         Repository<User> userRepository = new InMemoryRepository<>();
@@ -258,4 +259,12 @@ public class ConsoleApp {
         adminRepository.create(new Admin(2, "Ioana Popa", "ioana.popa@yahoo.com" , "1234"));
         return adminRepository;
     }
+
+    private static Repository<StarSign> createInMemoryStarSignRepository() {
+        Repository<StarSign> signRepository = new InMemoryRepository<>();
+        //signRepository.create(new StarSign());
+        return signRepository;
+    }
+
+
 }

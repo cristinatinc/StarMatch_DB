@@ -9,10 +9,12 @@ import java.util.List;
 public class StarMatchService {
     private final Repository<User> userRepository;
     private final Repository<Admin> adminRepository;
+    private final Repository<StarSign> signRepository;
 
-    public StarMatchService(Repository<User> userRepository, Repository<Admin> adminRepository) {
+    public StarMatchService(Repository<User> userRepository, Repository<Admin> adminRepository, Repository<StarSign> signRepository) {
         this.userRepository = userRepository;
         this.adminRepository = adminRepository;
+        this.signRepository = signRepository;
     }
 
     public boolean validateUserLogin(String email, String password) {
@@ -131,4 +133,6 @@ public class StarMatchService {
         };
         return zodiacSigns[index];
     }
+
+
 }

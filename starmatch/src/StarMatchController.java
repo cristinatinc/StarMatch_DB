@@ -39,11 +39,11 @@ public class StarMatchController {
     }
 
     public NatalChart viewNatalChart(String userEmail){
-        User user = starMatchService.getUserByEmail(userEmail); // Implement getUserByEmail in service
+        User user = starMatchService.getUserByEmail(userEmail);
         if (user != null) {
             return starMatchService.getNatalChart(user);
         } else {
-            System.out.println("User not found.");
+            System.out.println("User not found."); //o sa fie o exceptie aici dar nu o pun acum
             return null;
         }
     }
