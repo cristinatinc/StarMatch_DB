@@ -32,7 +32,7 @@ public class StarMatchController {
         System.out.println(output);
     }
 
-    public void viewUserProfile(){
+    public void viewUsers(){
         StringBuilder output = new StringBuilder("User profile:\n");
         starMatchService.getUsers().forEach(course -> output.append(course.toString()).append("\n"));
         System.out.println(output);
@@ -47,4 +47,10 @@ public class StarMatchController {
             return null;
         }
     }
+
+    public User viewUserProfile(String userEmail){
+        User user = starMatchService.getUserByEmail(userEmail);
+        return user;
+    }
+
 }

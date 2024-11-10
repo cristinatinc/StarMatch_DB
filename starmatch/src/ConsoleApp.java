@@ -119,7 +119,7 @@ public class ConsoleApp {
                     System.out.println("Logging out...");
                     userLoop = false;
                 }
-                case "1" -> System.out.println("Displaying profile...");
+                case "1" -> viewUserProfile(userEmail);
                 case "2" -> viewNatalChart(userEmail);
                 case "3" -> System.out.println("Displaying personality traits...");
                 case "4" -> System.out.println("Displaying daily quote...");
@@ -208,6 +208,27 @@ public class ConsoleApp {
         } else {
             System.out.println("No natal chart available for this user.");
         }
+    }
+
+    private void viewUserProfile(String userEmail) {
+        User user=starMatchController.viewUserProfile(userEmail);
+        System.out.println("""
+                User Profile:
+                Name: """ + user.getName() + """
+                
+                Birthdate: """ + user.getBirthDate() +
+                """
+                
+                Birthtime: """ + user.getBirthTime() +
+                """
+                
+                Birthplace: """ + user.getBirthPlace() +
+                """
+                
+                Email: """ + user.getEmail() +
+                """
+                
+                Password: """ + user.getPassword());
     }
 
     public static void main(String[] args) {
