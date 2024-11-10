@@ -39,13 +39,23 @@ public class StarMatchController {
 
     public void viewAdmins(){
         StringBuilder output = new StringBuilder("Admins of the app:\n");
-        starMatchService.getAdmins().forEach(course -> output.append(course.toString()).append("\n"));
+        starMatchService.getAdmins().forEach(admin -> output.append(admin.toString()).append("\n"));
         System.out.println(output);
+    }
+
+    public void viewQuotes(){
+        StringBuilder output = new StringBuilder("Quotes:\n");
+        starMatchService.getQuotes().forEach(quote -> output.append(quote.toString()).append("\n"));
+        System.out.println(output);
+    }
+
+    public void addNewQuote(String newQuote, String element){
+        starMatchService.createQuote(newQuote, element);
     }
 
     public void viewUsers(){
         StringBuilder output = new StringBuilder("User profile:\n");
-        starMatchService.getUsers().forEach(course -> output.append(course.toString()).append("\n"));
+        starMatchService.getUsers().forEach(user -> output.append(user.toString()).append("\n"));
         System.out.println(output);
     }
 

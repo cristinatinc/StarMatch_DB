@@ -150,7 +150,7 @@ public class ConsoleApp {
                 }
                 case "1" -> adminManageUserMenu(scanner);
                 case "2" -> System.out.println("Managing traits...");
-                case "3" -> System.out.println("Managing quotes...");
+                case "3" -> adminManageQuotesMenu(scanner);
                 case "4" -> adminManageAdminMenu(scanner);
                 default -> System.out.println("Invalid option. Please try again.");
             }
@@ -186,6 +186,42 @@ public class ConsoleApp {
         String userID = scanner.nextLine();
 
         starMatchController.removeUser(Integer.valueOf(userID));
+    }
+
+    private void adminManageQuotesMenu(Scanner scanner) {
+        boolean adminLoop = true;
+        while (adminLoop) {
+            System.out.print("""
+                    -- Manage Quotes used by the app --
+                    1. View all quotes
+                    2. Add new quote
+                    3. Delete quote
+                    4. Update quote
+                    
+                    0. Go back to main menu
+                    """);
+
+            String adminOption = scanner.nextLine();
+
+            switch (adminOption) {
+                case "0" -> adminLoop = false;
+                case "1" -> starMatchController.viewQuotes();
+                case "2" -> addNewQuote(scanner);
+                case "3" -> System.out.println("doing.....");
+                case "4" -> System.out.println("doing....");
+                default -> System.out.println("Invalid option. Please try again.");
+            }
+        }
+    }
+
+    private void addNewQuote(Scanner scanner) {
+        System.out.println("-- Add New Quote --");
+        System.out.print("Enter the quote: ");
+        String newQuote = scanner.nextLine();
+        System.out.print("Enter the element represented by the quote: ");
+        String element = scanner.nextLine();
+
+        starMatchController.addNewQuote(newQuote, element);
     }
 
     private void adminManageAdminMenu(Scanner scanner) {

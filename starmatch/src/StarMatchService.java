@@ -30,7 +30,7 @@ public class StarMatchService {
     }
 
     public void createUser(String name, LocalDate birthDate, LocalTime birthTime, String birthPlace, String email, String password) {
-        User newUser = new User(getMaxUserId() + 1, name, birthDate, birthTime, birthPlace, email, password);
+        User newUser = new User(getMaxId(userRepository) + 1, name, birthDate, birthTime, birthPlace, email, password);
         userRepository.create(newUser);
     }
 
@@ -39,7 +39,7 @@ public class StarMatchService {
     }
 
     public void createAdmin(String name, String email, String password) {
-        Admin newAdmin = new Admin(getMaxUserId() + 1, name, email, password);
+        Admin newAdmin = new Admin(getMaxId(adminRepository) + 1, name, email, password);
         adminRepository.create(newAdmin);
     }
 
@@ -61,10 +61,27 @@ public class StarMatchService {
         }
     }
 
+    public void createQuote(String newQuoteText, String element) {
+        Element quoteElement = null;
+        for (Element e : Element.values()) {
+            if (e.name().equalsIgnoreCase(element)) {
+                quoteElement = e;
+                break;
+            }
+        }
+        if (quoteElement != null) {
+            Quote newQuote = new Quote(getMaxId(quoteRepository) + 1, quoteElement, newQuoteText);
+            quoteRepository.create(newQuote);
+            System.out.println("Quote added successfully!");
+        } else {
+            System.out.println("Invalid element specified. Quote not created.");
+        }
+    }
 
-    public int getMaxUserId() {
-        return userRepository.getAll().stream()
-                .mapToInt(User::getId)
+
+    public <T extends HasId> int getMaxId(Repository<T> repository) {
+        return repository.getAll().stream()
+                .mapToInt(T::getId)
                 .max()
                 .orElse(0);
     }
@@ -72,6 +89,9 @@ public class StarMatchService {
     public List<Admin> getAdmins() { return adminRepository.getAll();}
 
     public List<User> getUsers() { return userRepository.getAll();}
+
+    public List<Quote> getQuotes() { return quoteRepository.getAll();}
+
 
     public User getUserByEmail(String email) {
         return userRepository.getAll().stream()
