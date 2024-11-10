@@ -10,11 +10,13 @@ public class StarMatchService {
     private final Repository<User> userRepository;
     private final Repository<Admin> adminRepository;
     private final Repository<StarSign> signRepository;
+    private final Repository<Quote> quoteRepository;
 
-    public StarMatchService(Repository<User> userRepository, Repository<Admin> adminRepository, Repository<StarSign> signRepository) {
+    public StarMatchService(Repository<User> userRepository, Repository<Admin> adminRepository, Repository<StarSign> signRepository, Repository<Quote> quoteRepository) {
         this.userRepository = userRepository;
         this.adminRepository = adminRepository;
         this.signRepository = signRepository;
+        this.quoteRepository = quoteRepository;
     }
 
     public boolean validateUserLogin(String email, String password) {
@@ -32,6 +34,10 @@ public class StarMatchService {
         userRepository.create(newUser);
     }
 
+    public void removeUser(Integer userId) {
+        userRepository.delete(userId);
+    }
+
     public void createAdmin(String name, String email, String password) {
         Admin newAdmin = new Admin(getMaxUserId() + 1, name, email, password);
         adminRepository.create(newAdmin);
@@ -40,6 +46,21 @@ public class StarMatchService {
     public void removeAdmin(Integer adminId){
         adminRepository.delete(adminId);
     }
+
+    public void updateAdmin(Integer adminId, String name, String email, String password) {
+        Admin admin = adminRepository.get(adminId);
+
+        if (admin != null) {
+            if (!name.isBlank()) admin.setName(name);
+            if (!email.isBlank()) admin.setEmail(email);
+            if (!password.isBlank()) admin.setPassword(password);
+            adminRepository.update(admin);
+            System.out.println("Admin updated successfully.");
+        } else {
+            System.out.println("Admin not found.");
+        }
+    }
+
 
     public int getMaxUserId() {
         return userRepository.getAll().stream()

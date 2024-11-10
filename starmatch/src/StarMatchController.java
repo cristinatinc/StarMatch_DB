@@ -32,6 +32,11 @@ public class StarMatchController {
         System.out.println("Removed admin with ID " + adminID);
     }
 
+    public void updateAdmin(Integer adminID, String name, String email, String password){
+        starMatchService.updateAdmin(adminID, name, email, password);
+        System.out.println("Admin updated successfully!");
+    }
+
     public void viewAdmins(){
         StringBuilder output = new StringBuilder("Admins of the app:\n");
         starMatchService.getAdmins().forEach(course -> output.append(course.toString()).append("\n"));
@@ -42,6 +47,11 @@ public class StarMatchController {
         StringBuilder output = new StringBuilder("User profile:\n");
         starMatchService.getUsers().forEach(course -> output.append(course.toString()).append("\n"));
         System.out.println(output);
+    }
+
+    public void removeUser(Integer userID){
+        starMatchService.removeUser(userID);
+        System.out.println("Removed user with ID " + userID);
     }
 
     public NatalChart viewNatalChart(String userEmail){
@@ -55,8 +65,7 @@ public class StarMatchController {
     }
 
     public User viewUserProfile(String userEmail){
-        User user = starMatchService.getUserByEmail(userEmail);
-        return user;
+        return starMatchService.getUserByEmail(userEmail);
     }
 
 }

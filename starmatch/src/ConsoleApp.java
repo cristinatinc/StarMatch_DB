@@ -1,7 +1,4 @@
-import model.Admin;
-import model.NatalChart;
-import model.StarSign;
-import model.User;
+import model.*;
 import repository.InMemoryRepository;
 import repository.Repository;
 
@@ -151,13 +148,44 @@ public class ConsoleApp {
                     System.out.println("Logging out...");
                     adminLoop = false;
                 }
-                case "1" -> System.out.println("Managing users...");
+                case "1" -> adminManageUserMenu(scanner);
                 case "2" -> System.out.println("Managing traits...");
                 case "3" -> System.out.println("Managing quotes...");
                 case "4" -> adminManageAdminMenu(scanner);
                 default -> System.out.println("Invalid option. Please try again.");
             }
         }
+    }
+
+    private void adminManageUserMenu(Scanner scanner) {
+        boolean adminLoop = true;
+        while (adminLoop) {
+            System.out.print("""
+                    -- Manage other Users --
+                    1. View all users
+                    2. Delete users
+                    
+                    0. Go back to main menu
+                    """);
+
+            String adminOption = scanner.nextLine();
+
+            switch (adminOption) {
+                case "0" -> adminLoop = false;
+                case "1" -> starMatchController.viewUsers();
+                case "2" -> removeUsers(scanner);
+                default -> System.out.println("Invalid option. Please try again.");
+            }
+        }
+    }
+
+    private void removeUsers(Scanner scanner) {
+        System.out.println("-- Remove Users --");
+        starMatchController.viewUsers();
+        System.out.print("User ID: ");
+        String userID = scanner.nextLine();
+
+        starMatchController.removeUser(Integer.valueOf(userID));
     }
 
     private void adminManageAdminMenu(Scanner scanner) {
@@ -180,7 +208,7 @@ public class ConsoleApp {
                 case "1" -> starMatchController.viewAdmins();
                 case "2" -> addNewAdmin(scanner);
                 case "3" -> removeAdmin(scanner);
-                case "4" -> System.out.println("update existing admin...");
+                case "4" -> updateAdmin(scanner);
                 default -> System.out.println("Invalid option. Please try again.");
             }
         }
@@ -206,6 +234,24 @@ public class ConsoleApp {
 
         starMatchController.removeAdmin(Integer.valueOf(adminID));
     }
+
+    private void updateAdmin(Scanner scanner) {
+        System.out.println("-- Update Existing Admin --");
+        starMatchController.viewAdmins();
+
+        System.out.print("Admin ID to update: ");
+        Integer adminId = Integer.valueOf(scanner.nextLine());
+
+        System.out.print("New Name (leave blank to keep current): ");
+        String name = scanner.nextLine();
+        System.out.print("New Email (leave blank to keep current): ");
+        String email = scanner.nextLine();
+        System.out.print("New Password (leave blank to keep current): ");
+        String password = scanner.nextLine();
+
+        starMatchController.updateAdmin(adminId, name, email, password);
+    }
+
 
     private void viewNatalChart(String userEmail) {
         NatalChart natalChart = starMatchController.viewNatalChart(userEmail);
@@ -244,8 +290,9 @@ public class ConsoleApp {
         Repository<User> userRepository = createInMemoryUserRepository();
         Repository<Admin> adminRepository = createInMemoryAdminRepository();
         Repository<StarSign> signRepository = createInMemoryStarSignRepository();
+        Repository<Quote> quoteRepository = createInMemoryQuoteRepository();
 
-        StarMatchService starMatchService = new StarMatchService(userRepository, adminRepository,signRepository);
+        StarMatchService starMatchService = new StarMatchService(userRepository, adminRepository,signRepository, quoteRepository);
         StarMatchController starMatchController = new StarMatchController(starMatchService);
 
         ConsoleApp consoleApp = new ConsoleApp(starMatchController);
@@ -274,5 +321,30 @@ public class ConsoleApp {
         return signRepository;
     }
 
+    private static Repository<Quote> createInMemoryQuoteRepository() {
+        Repository<Quote> quoteRepository = new InMemoryRepository<>();
+        Element fire = Element.Fire;
+        Element water = Element.Water;
+        Element air = Element.Air;
+        Element earth = Element.Earth;
+
+        quoteRepository.create(new Quote(1, fire ,"The only trip you will regret is the one you don’t take." ));
+        quoteRepository.create(new Quote(2, fire ,"Adventure is worthwhile in itself." ));
+        quoteRepository.create(new Quote(3, fire ,"Life begins at the end of your comfort zone." ));
+        quoteRepository.create(new Quote(4, fire ,"Free spirits don't ask for permission." ));
+        quoteRepository.create(new Quote(5, water ,"Normal is nothing more than a cycle on a washing machine." ));
+        quoteRepository.create(new Quote(6, water ,"The great gift of human beings is that we have the power of empathy." ));
+        quoteRepository.create(new Quote(7, water ,"To be rude to someone is not my nature." ));
+        quoteRepository.create(new Quote(8, water ,"Learn as much from joy as you do from pain." ));
+        quoteRepository.create(new Quote(9, air ,"That was her gift. She filled you with words you didn’t know were there." ));
+        quoteRepository.create(new Quote(10, air ,"I feel like I'm too busy writing history to read it." ));
+        quoteRepository.create(new Quote(11, air ,"Identify with everything. Align with nothing." ));
+        quoteRepository.create(new Quote(12, air ,"Everything in the universe is within you. Ask all from yourself." ));
+        quoteRepository.create(new Quote(13, earth ,"Empty yourself and let the universe fill you." ));
+        quoteRepository.create(new Quote(14, earth ,"Fall seven times, stand up eight." ));
+        quoteRepository.create(new Quote(15, earth ,"I have standards I don’t plan on lowering for anybody, including myself." ));
+        quoteRepository.create(new Quote(16, earth ,"Be easily awed, not easily impressed." ));
+        return quoteRepository;
+    }
 
 }
