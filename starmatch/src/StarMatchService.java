@@ -49,16 +49,10 @@ public class StarMatchService {
 
     public void updateAdmin(Integer adminId, String name, String email, String password) {
         Admin admin = adminRepository.get(adminId);
-
-        if (admin != null) {
-            if (!name.isBlank()) admin.setName(name);
-            if (!email.isBlank()) admin.setEmail(email);
-            if (!password.isBlank()) admin.setPassword(password);
-            adminRepository.update(admin);
-            System.out.println("Admin updated successfully.");
-        } else {
-            System.out.println("Admin not found.");
-        }
+        if (!name.isBlank()) admin.setName(name);
+        if (!email.isBlank()) admin.setEmail(email);
+        if (!password.isBlank()) admin.setPassword(password);
+        adminRepository.update(admin);
     }
 
     public void createQuote(String newQuoteText, String element) {
@@ -78,6 +72,15 @@ public class StarMatchService {
         }
     }
 
+    public void removeQuote(Integer quoteId) {
+        quoteRepository.delete(quoteId);
+    }
+
+    public void updateQuote(Integer quoteId, String newQuoteText) {
+        Quote quote = quoteRepository.get(quoteId);
+        quote.setQuoteText(newQuoteText);
+        quoteRepository.update(quote);
+    }
 
     public <T extends HasId> int getMaxId(Repository<T> repository) {
         return repository.getAll().stream()

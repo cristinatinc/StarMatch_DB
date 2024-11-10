@@ -53,6 +53,16 @@ public class StarMatchController {
         starMatchService.createQuote(newQuote, element);
     }
 
+    public void removeQuote(Integer quoteID){
+        starMatchService.removeQuote(quoteID);
+        System.out.println("Quote removed successfully!");
+    }
+
+    public void updateQuote(Integer quoteID, String quoteText){
+        starMatchService.updateQuote(quoteID, quoteText);
+        System.out.println("Quote updated successfully!");
+    }
+
     public void viewUsers(){
         StringBuilder output = new StringBuilder("User profile:\n");
         starMatchService.getUsers().forEach(user -> output.append(user.toString()).append("\n"));

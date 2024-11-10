@@ -165,7 +165,7 @@ public class ConsoleApp {
                     1. View all users
                     2. Delete users
                     
-                    0. Go back to main menu
+                    0. Go back to admin menu
                     """);
 
             String adminOption = scanner.nextLine();
@@ -196,9 +196,9 @@ public class ConsoleApp {
                     1. View all quotes
                     2. Add new quote
                     3. Delete quote
-                    4. Update quote
+                    4. Update quote text
                     
-                    0. Go back to main menu
+                    0. Go back to admin menu
                     """);
 
             String adminOption = scanner.nextLine();
@@ -207,8 +207,8 @@ public class ConsoleApp {
                 case "0" -> adminLoop = false;
                 case "1" -> starMatchController.viewQuotes();
                 case "2" -> addNewQuote(scanner);
-                case "3" -> System.out.println("doing.....");
-                case "4" -> System.out.println("doing....");
+                case "3" -> removeQuote(scanner);
+                case "4" -> updateQuote(scanner);
                 default -> System.out.println("Invalid option. Please try again.");
             }
         }
@@ -224,6 +224,26 @@ public class ConsoleApp {
         starMatchController.addNewQuote(newQuote, element);
     }
 
+    private void removeQuote(Scanner scanner) {
+        System.out.println("-- Delete quote --");
+        starMatchController.viewQuotes();
+        System.out.print("Quote ID: ");
+        String quoteID = scanner.nextLine();
+
+        starMatchController.removeQuote(Integer.valueOf(quoteID));
+    }
+
+    private void updateQuote(Scanner scanner) {
+        System.out.println("-- Update Quote --");
+        starMatchController.viewQuotes();
+        System.out.print("Enter the quote ID to update: ");
+        String quoteID = scanner.nextLine();
+        System.out.print("New quote text: ");
+        String quoteText = scanner.nextLine();
+
+        starMatchController.updateQuote(Integer.valueOf(quoteID), quoteText);
+    }
+
     private void adminManageAdminMenu(Scanner scanner) {
         boolean adminLoop = true;
         while (adminLoop) {
@@ -234,7 +254,7 @@ public class ConsoleApp {
                     3. Delete admin
                     4. Update existing admin
                     
-                    0. Go back to main menu
+                    0. Go back to admin menu
                     """);
 
             String adminOption = scanner.nextLine();
