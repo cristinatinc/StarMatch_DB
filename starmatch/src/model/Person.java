@@ -8,7 +8,7 @@ public abstract class Person implements HasId{
     protected String name;
     protected LocalDate birthDate;
     protected LocalTime birthTime;
-    private String birthPlace;
+    protected String birthPlace;
 
     protected Person(int id, String name, LocalDate birthDate, LocalTime birthTime, String birthPlace) {
         this.id = id;
