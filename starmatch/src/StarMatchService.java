@@ -84,6 +84,22 @@ public class StarMatchService {
         quoteRepository.update(quote);
     }
 
+    public void createTrait(String traitName, Element element){
+        Trait trait=new Trait(element,traitName,getMaxId(traitRepository)+1);
+        traitRepository.create(trait);
+    }
+
+    public void removeTrait(Integer traitId){
+        traitRepository.delete(traitId);
+    }
+
+    public void updateTrait(Integer traitID, String traitName, Element element){
+        Trait trait = traitRepository.get(traitID);
+        if(!traitName.isBlank()) trait.setTraitName(traitName);
+        if(element!=null) trait.setElement(element);
+        traitRepository.update(trait);
+    }
+
     public <T extends HasId> int getMaxId(Repository<T> repository) {
         return repository.getAll().stream()
                 .mapToInt(T::getId)
@@ -96,6 +112,8 @@ public class StarMatchService {
     public List<User> getUsers() { return userRepository.getAll();}
 
     public List<Quote> getQuotes() { return quoteRepository.getAll();}
+
+    public List<Trait> getTraits(){ return traitRepository.getAll();}
 
     public User getUserByEmail(String email) {
         return userRepository.getAll().stream()

@@ -1,3 +1,4 @@
+import model.Element;
 import model.NatalChart;
 import model.User;
 
@@ -62,6 +63,24 @@ public class StarMatchController {
     public void updateQuote(Integer quoteID, String quoteText){
         starMatchService.updateQuote(quoteID, quoteText);
         System.out.println("Quote updated successfully!");
+    }
+
+    public void viewTraits(){
+        StringBuilder output = new StringBuilder("Traits:\n");
+        starMatchService.getTraits().forEach(trait -> output.append(trait.toString()).append("\n"));
+        System.out.println(output);
+    }
+
+    public void addTrait(String traitName, Element element){
+        starMatchService.createTrait(traitName,element);
+    }
+
+    public void removeTrait(Integer traitID){
+        starMatchService.removeTrait(traitID);
+    }
+
+    public void updateTrait(Integer traitID, String traitName, Element element){
+        starMatchService.updateTrait(traitID,traitName,element);
     }
 
     public void viewUsers(){

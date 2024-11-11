@@ -153,7 +153,7 @@ public class ConsoleApp {
                     adminLoop = false;
                 }
                 case "1" -> adminManageUserMenu(scanner);
-                case "2" -> System.out.println("Managing traits...");
+                case "2" -> adminManageTraitsMenu(scanner);
                 case "3" -> adminManageQuotesMenu(scanner);
                 case "4" -> adminManageAdminMenu(scanner);
                 default -> System.out.println("Invalid option. Please try again.");
@@ -312,16 +312,75 @@ public class ConsoleApp {
         starMatchController.updateAdmin(adminId, name, email, password);
     }
 
-    private void viewNatalChart(String userEmail) {
-        NatalChart natalChart = starMatchController.viewNatalChart(userEmail);
-        if (natalChart != null) {
-            System.out.println("Natal Chart:");
-            natalChart.getPlanets().forEach(planet ->
-                    System.out.println(planet.getPlanetName() + ": " + planet.getSign().getStarName())
-            );
-        } else {
-            System.out.println("No natal chart available for this user.");
+    private void adminManageTraitsMenu(Scanner scanner) {
+        boolean adminLoop = true;
+        while (adminLoop) {
+            System.out.print("""
+                    -- Manage Traits used by the app --
+                    1. View all traits
+                    2. Add new trait
+                    3. Delete trait
+                    4. Update trait
+                    
+                    0. Go back to admin menu
+                    """);
+
+            String adminOption = scanner.nextLine();
+
+            switch (adminOption) {
+                case "0" -> adminLoop = false;
+                case "1" -> starMatchController.viewTraits();
+                case "2" -> addNewTrait(scanner);
+                case "3" -> removeTrait(scanner);
+                case "4" -> updateTrait(scanner);
+                default -> System.out.println("Invalid option. Please try again.");
+            }
         }
+    }
+
+    private void addNewTrait(Scanner scanner) {
+        System.out.println("-- Add New Trait --");
+        System.out.print("Enter the name of the trait: ");
+        String traitName = scanner.nextLine();
+        System.out.print("Enter the element (Fire, Earth, Air, Water) that represents it: ");
+        String traitElement = scanner.nextLine();
+        Element element = null;
+        try {
+            element = Element.valueOf(traitElement);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid element specified. Trait not created.");
+            return;
+        }
+        starMatchController.addTrait(traitName,element);
+    }
+
+    private void removeTrait(Scanner scanner){
+        System.out.println("-- Remove Trait --");
+        starMatchController.viewTraits();
+        System.out.print("Trait ID to remove: ");
+        String traitID = scanner.nextLine();
+        starMatchController.removeTrait(Integer.valueOf(traitID));
+    }
+
+    private void updateTrait(Scanner scanner){
+        System.out.println("-- Update Existing Trait --");
+        starMatchController.viewTraits();
+        System.out.print("Trait ID to update: ");
+        String traitID = scanner.nextLine();
+        System.out.print("New Name (leave blank to keep current): ");
+        String traitName = scanner.nextLine();
+        System.out.print("New Element (leave blank to keep current): ");
+        String traitElement = scanner.nextLine();
+        Element element = null;
+        if (!traitElement.isBlank()) {
+            try {
+                element = Element.valueOf(traitElement);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid element specified. Trait not updated.");
+                return;
+            }
+        }
+        starMatchController.updateTrait(Integer.valueOf(traitID),traitName,element);
     }
 
     private void viewUserProfile(String userEmail) {
@@ -370,6 +429,18 @@ public class ConsoleApp {
         String birthPlace = scanner.nextLine();
 
         starMatchController.updateUser(user,name,email,password,birthDate,birthTime,birthPlace);
+    }
+
+    private void viewNatalChart(String userEmail) {
+        NatalChart natalChart = starMatchController.viewNatalChart(userEmail);
+        if (natalChart != null) {
+            System.out.println("Natal Chart:");
+            natalChart.getPlanets().forEach(planet ->
+                    System.out.println(planet.getPlanetName() + ": " + planet.getSign().getStarName())
+            );
+        } else {
+            System.out.println("No natal chart available for this user.");
+        }
     }
 
     private void viewPersonalityTraits(String userEmail){
@@ -435,6 +506,7 @@ public class ConsoleApp {
     }
 
     public void removeFriend(Scanner scanner, String userEmail) {
+        viewFriends(userEmail);
         System.out.println("Enter the email of the user you want to remove as friend:");
         String friendEmail = scanner.nextLine();
         try{
