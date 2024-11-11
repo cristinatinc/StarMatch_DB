@@ -3,9 +3,7 @@ import repository.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class StarMatchService {
@@ -195,6 +193,26 @@ public class StarMatchService {
         if (birthTime!=null) user1.setBirthTime(birthTime);
         if (!birthPlace.isBlank()) user1.setBirthPlace(birthPlace);
         userRepository.update(user1);
+    }
+
+    public List<User> getAllUsersExcept(User currentUser){
+        return userRepository.getAll().stream().filter(user -> !user.equals(currentUser)).collect(Collectors.toList());
+    }
+
+    public void addFriend(User user, String friendEmail){
+        User friend=userRepository.getAll().stream().filter(user1 -> user1.getEmail().equals(friendEmail)).findFirst().orElseThrow(() -> new NoSuchElementException("User with that email does not exist"));
+        if(!user.getFriends().contains(friend))
+            user.getFriends().add(friend);
+    }
+
+    public List<User> getFriends(User user){
+        return user.getFriends();
+    }
+
+    public void removeFriend(User user, String friendEmail){
+        User friend=userRepository.getAll().stream().filter(user1 -> user1.getEmail().equals(friendEmail)).findFirst().orElseThrow(() -> new NoSuchElementException("User with that email does not exist"));
+        if(user.getFriends().contains(friend))
+            user.getFriends().remove(friend);
     }
 
 }

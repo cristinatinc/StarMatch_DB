@@ -104,4 +104,24 @@ public class StarMatchController {
         starMatchService.updateUser(user1,name,email,password,birthDate,birthTime,birthPlace);
     }
 
+    public List<User> getAllUsersExcept(String userEmail){
+        User currentUser = starMatchService.getUserByEmail(userEmail);
+        return starMatchService.getAllUsersExcept(currentUser);
+    }
+
+    public void addFriend(String userEmail, String friendEmail){
+        User user = starMatchService.getUserByEmail(userEmail);
+        starMatchService.addFriend(user,friendEmail);
+    }
+
+    public List<User> viewFriends(String userEmail){
+        User user = starMatchService.getUserByEmail(userEmail);
+        return starMatchService.getFriends(user);
+    }
+
+    public void removeFriend(String userEmail, String friendEmail){
+        User user = starMatchService.getUserByEmail(userEmail);
+        starMatchService.removeFriend(user,friendEmail);
+    }
+
 }

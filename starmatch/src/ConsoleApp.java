@@ -5,6 +5,7 @@ import repository.Repository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class ConsoleApp {
@@ -124,7 +125,7 @@ public class ConsoleApp {
                 case "3" -> viewNatalChart(userEmail);
                 case "4" -> viewPersonalityTraits(userEmail);
                 case "5" -> viewPersonalizedQuote(userEmail);
-                case "6" -> System.out.println("Managing friends...");
+                case "6" -> manageFriendsMenu(scanner,userEmail);
                 case "7" -> System.out.println("Checking compatibility...");
                 default -> System.out.println("Invalid option. Please try again.");
             }
@@ -311,7 +312,6 @@ public class ConsoleApp {
         starMatchController.updateAdmin(adminId, name, email, password);
     }
 
-
     private void viewNatalChart(String userEmail) {
         NatalChart natalChart = starMatchController.viewNatalChart(userEmail);
         if (natalChart != null) {
@@ -381,6 +381,68 @@ public class ConsoleApp {
     private void viewPersonalizedQuote(String userEmail) {
         System.out.println("Your personalized quote:");
         System.out.println(starMatchController.getPersonalizedQuote(userEmail));
+    }
+
+    private void manageFriendsMenu(Scanner scanner, String userEmail) {
+        boolean friendLoop=true;
+        while (friendLoop) {
+            System.out.println("-- Manage Friends Menu --");
+            System.out.println("""
+                    1. View all users
+                    2. Add friend
+                    3. View all friends
+                    4. Remove friend
+                    
+                    0.Go back to user dashboard
+                    """);
+            String friendOption = scanner.nextLine();
+
+            switch (friendOption) {
+                case "0" -> friendLoop = false;
+                case "1" -> viewAllUsers(userEmail);
+                case "2" -> addFriend(scanner,userEmail);
+                case "3" -> viewFriends(userEmail);
+                case "4" -> removeFriend(scanner,userEmail);
+                default -> System.out.println("Invalid option. Please try again.");
+            }
+        }
+    }
+
+    private void viewAllUsers(String userEmail) {
+        System.out.println("-- All Users --");
+        List<User> allUsers = starMatchController.getAllUsersExcept(userEmail);
+        allUsers.forEach(user -> System.out.println(user.getName() + " (" + user.getEmail() + ")"));
+    }
+
+    public void addFriend(Scanner scanner, String userEmail) {
+        System.out.println("Enter the email of the user you want to add as friend:");
+        String friendEmail = scanner.nextLine();
+        try{
+        starMatchController.addFriend(userEmail,friendEmail);
+        System.out.println("Friend added!");}
+        catch (NoSuchElementException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void viewFriends(String userEmail) {
+        System.out.println("Your friends:");
+        List<User> friends = starMatchController.viewFriends(userEmail);
+        if(friends.isEmpty())
+            System.out.println("No friends found.");
+        else
+            friends.forEach(friend -> System.out.println(friend.getName() + " (" + friend.getEmail() + ")"));
+    }
+
+    public void removeFriend(Scanner scanner, String userEmail) {
+        System.out.println("Enter the email of the user you want to remove as friend:");
+        String friendEmail = scanner.nextLine();
+        try{
+        starMatchController.removeFriend(userEmail,friendEmail);
+        System.out.println("Friend removed!");}
+        catch (NoSuchElementException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public static void main(String[] args) {
