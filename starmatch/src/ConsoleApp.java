@@ -102,11 +102,12 @@ public class ConsoleApp {
             System.out.print("""
                     -- User Dashboard --
                     1. View Profile
-                    2. View Natal Chart
-                    3. View Personality Traits
-                    4. View Personalized Quote
-                    5. Manage Friends
-                    6. Check Compatibility
+                    2. Update Profile
+                    3. View Natal Chart
+                    4. View Personality Traits
+                    5. View Personalized Quote
+                    6. Manage Friends
+                    7. Check Compatibility
                     
                     0. Log Out
                     """);
@@ -119,11 +120,12 @@ public class ConsoleApp {
                     userLoop = false;
                 }
                 case "1" -> viewUserProfile(userEmail);
-                case "2" -> viewNatalChart(userEmail);
-                case "3" -> viewPersonalityTraits(userEmail);
-                case "4" -> viewPersonalizedQuote(userEmail);
-                case "5" -> System.out.println("Managing friends...");
-                case "6" -> System.out.println("Checking compatibility...");
+                case "2" -> updateUserProfile(scanner, userEmail);
+                case "3" -> viewNatalChart(userEmail);
+                case "4" -> viewPersonalityTraits(userEmail);
+                case "5" -> viewPersonalizedQuote(userEmail);
+                case "6" -> System.out.println("Managing friends...");
+                case "7" -> System.out.println("Checking compatibility...");
                 default -> System.out.println("Invalid option. Please try again.");
             }
         }
@@ -341,6 +343,33 @@ public class ConsoleApp {
                 """
                 
                 Password:""" + user.getPassword());
+    }
+
+    private void updateUserProfile(Scanner scanner, String userEmail){
+        System.out.println("-- Update User Profile --");
+        User user=starMatchController.viewUserProfile(userEmail);
+
+        System.out.print("New Name (leave blank to keep current): ");
+        String name = scanner.nextLine();
+
+        System.out.print("New Email (leave blank to keep current): ");
+        String email = scanner.nextLine();
+
+        System.out.print("New Password (leave blank to keep current): ");
+        String password = scanner.nextLine();
+
+        System.out.print("New Birth Date (YYYY-MM-DD) (leave blank to keep current): ");
+        String birthDateInput = scanner.nextLine();
+        LocalDate birthDate = birthDateInput.isBlank() ? null : LocalDate.parse(birthDateInput);
+
+        System.out.print("New Birth Time (HH:MM) (leave blank to keep current): ");
+        String birthTimeInput = scanner.nextLine();
+        LocalTime birthTime = birthTimeInput.isBlank() ? null : LocalTime.parse(birthTimeInput);
+
+        System.out.print("New Birth Place (leave blank to keep current): ");
+        String birthPlace = scanner.nextLine();
+
+        starMatchController.updateUser(user,name,email,password,birthDate,birthTime,birthPlace);
     }
 
     private void viewPersonalityTraits(String userEmail){

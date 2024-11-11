@@ -99,4 +99,9 @@ public class StarMatchController {
         return starMatchService.getPersonalizedQuote(user);
     }
 
+    public void updateUser(User user, String name, String email, String password, LocalDate birthDate, LocalTime birthTime, String birthPlace){
+        User user1=starMatchService.getUserByEmail(user.getEmail());
+        starMatchService.updateUser(user1,name,email,password,birthDate,birthTime,birthPlace);
+    }
+
 }

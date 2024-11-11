@@ -185,4 +185,16 @@ public class StarMatchService {
         Random random=new Random();
         return quotes.get(random.nextInt(quotes.size()));
     }
+
+    public void updateUser(User user,String name, String email, String password, LocalDate birthDate, LocalTime birthTime, String birthPlace){
+        User user1 = userRepository.get(user.getId());
+        if (!name.isBlank()) user1.setName(name);
+        if (!email.isBlank()) user1.setEmail(email);
+        if (!password.isBlank()) user1.setPassword(password);
+        if (birthDate!=null) user1.setBirthDate(birthDate);
+        if (birthTime!=null) user1.setBirthTime(birthTime);
+        if (!birthPlace.isBlank()) user1.setBirthPlace(birthPlace);
+        userRepository.update(user1);
+    }
+
 }
