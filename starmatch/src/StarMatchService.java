@@ -237,7 +237,7 @@ public class StarMatchService {
             user.getFriends().remove(friend);
     }
 
-    public long calculateCompatibility(User user, String friendEmail){
+    public Compatibility calculateCompatibility(User user, String friendEmail){
         User friend=userRepository.getAll().stream().filter(user1 -> user1.getEmail().equals(friendEmail)).findFirst().orElseThrow(() -> new NoSuchElementException("User with that email does not exist"));
         if(!user.getFriends().contains(friend))
             throw new NoSuchElementException("That User is not your friend");
@@ -260,7 +260,7 @@ public class StarMatchService {
         actualCompatibility=actualCompatibility/500000;
         if(actualCompatibility>100)
             actualCompatibility=100;
-        return actualCompatibility;
+        return new Compatibility(actualCompatibility,friend.getId(),user.getId());
     }
 
     private boolean checkElementCompatibility(Element userElement, Element friendElement){

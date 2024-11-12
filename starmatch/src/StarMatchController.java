@@ -1,3 +1,4 @@
+import model.Compatibility;
 import model.Element;
 import model.NatalChart;
 import model.User;
@@ -129,8 +130,11 @@ public class StarMatchController {
     }
 
     public void updateUser(User user, String name, String email, String password, LocalDate birthDate, LocalTime birthTime, String birthPlace){
+        if(starMatchService.validateEmail(email)){
         User user1=starMatchService.getUserByEmail(user.getEmail());
-        starMatchService.updateUser(user1,name,email,password,birthDate,birthTime,birthPlace);
+        starMatchService.updateUser(user1,name,email,password,birthDate,birthTime,birthPlace);}
+        else
+            throw new NoSuchElementException("Invalid email");
     }
 
     public List<User> getAllUsersExcept(String userEmail){
@@ -153,7 +157,7 @@ public class StarMatchController {
         starMatchService.removeFriend(user,friendEmail);
     }
 
-    public long getCompatibility(String userEmail, String friendEmail){
+    public Compatibility getCompatibility(String userEmail, String friendEmail){
         User user = starMatchService.getUserByEmail(userEmail);
         return starMatchService.calculateCompatibility(user, friendEmail);
     }
