@@ -166,7 +166,8 @@ public class StarMatchService {
         long daysSinceFixedDate = java.time.temporal.ChronoUnit.DAYS.between(
                 LocalDate.of(2000, 1, 1), birthDate);
         int moonIndex = (int) ((daysSinceFixedDate / 2.5) % 12);
-
+        if(moonIndex<0)
+            moonIndex+=12;
         String moonSignName = getZodiacSignFromIndex(moonIndex);
         return signRepository.getAll().stream().filter(starSign -> starSign.getStarName().equals(moonSignName)).findFirst().orElse(null);
     }
@@ -183,6 +184,9 @@ public class StarMatchService {
                 "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
                 "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
         };
+        int checkIndex=index%12;
+        if(checkIndex<0)
+            checkIndex+=12;
         return zodiacSigns[index];
     }
 
@@ -231,6 +235,68 @@ public class StarMatchService {
         User friend=userRepository.getAll().stream().filter(user1 -> user1.getEmail().equals(friendEmail)).findFirst().orElseThrow(() -> new NoSuchElementException("User with that email does not exist"));
         if(user.getFriends().contains(friend))
             user.getFriends().remove(friend);
+    }
+
+    public long calculateCompatibility(User user, String friendEmail){
+        User friend=userRepository.getAll().stream().filter(user1 -> user1.getEmail().equals(friendEmail)).findFirst().orElseThrow(() -> new NoSuchElementException("User with that email does not exist"));
+        if(!user.getFriends().contains(friend))
+            throw new NoSuchElementException("That User is not your friend");
+
+        NatalChart chartUser=getNatalChart(user);
+        NatalChart chartFriend=getNatalChart(friend);
+
+        StarSign userSunSign=chartUser.getPlanets().getFirst().getSign();
+        StarSign friendSunSign=chartFriend.getPlanets().getFirst().getSign();
+        StarSign userMoonSign=chartUser.getPlanets().get(1).getSign();
+        StarSign friendMoonSign=chartFriend.getPlanets().get(1).getSign();
+        StarSign userRisingSign=chartUser.getPlanets().getLast().getSign();
+        StarSign friendRisingSign=chartFriend.getPlanets().getLast().getSign();
+
+        boolean sunCompatible=checkElementCompatibility(userSunSign.getElement(),friendSunSign.getElement());
+        boolean moonCompatible=checkElementCompatibility(userMoonSign.getElement(),friendMoonSign.getElement());
+        boolean risingCompatible=checkElementCompatibility(userRisingSign.getElement(),friendRisingSign.getElement());
+
+        long actualCompatibility=calculateBinaryCompatibility(userSunSign,friendSunSign,sunCompatible)+calculateBinaryCompatibility(userMoonSign,friendMoonSign,moonCompatible)+calculateBinaryCompatibility(userRisingSign,friendRisingSign,risingCompatible);
+        actualCompatibility=actualCompatibility/500000;
+        if(actualCompatibility>100)
+            actualCompatibility=100;
+        return actualCompatibility;
+    }
+
+    private boolean checkElementCompatibility(Element userElement, Element friendElement){
+        if (userElement.equals(friendElement))
+            return true;
+        if (userElement.equals(Element.Fire) && friendElement.equals(Element.Air))
+            return true;
+        if (userElement.equals(Element.Air) && friendElement.equals(Element.Fire))
+            return true;
+        if (userElement.equals(Element.Water) && friendElement.equals(Element.Earth))
+            return true;
+        if (userElement.equals(Element.Earth) && friendElement.equals(Element.Water))
+            return true;
+        return false;
+    }
+
+    private long convertNameToBinary(String starName){
+        long binary=0;
+        for(char c:starName.toCharArray()){
+            binary+=Integer.parseInt(Integer.toBinaryString(c));
+        }
+        return binary;
+    }
+
+    private long calculateBinaryCompatibility(StarSign userStarSign, StarSign friendStarSign, boolean compatible){
+        long userStarNameBinary=convertNameToBinary(userStarSign.getStarName());
+        long friendStarNameBinary=convertNameToBinary(friendStarSign.getStarName());
+        long score=userStarNameBinary+friendStarNameBinary;
+        if(!compatible)
+            score-=5000000;
+        return score;
+    }
+
+    public boolean validateEmail(String email){
+        String emailValid = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+        return email != null && email.matches(emailValid);
     }
 
 }
