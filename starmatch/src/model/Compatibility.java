@@ -6,7 +6,7 @@ package model;
 public class Compatibility {
     private Integer userId;
     private Integer friendId;
-    private Integer compatibilityScore;
+    private long compatibilityScore;
 
     /**
      * Constructs a Compatibility instance with the specified compatibility score, friend ID, and user ID.
@@ -15,7 +15,7 @@ public class Compatibility {
      * @param friendId           the ID of the friend user
      * @param userId             the ID of the primary user
      */
-    public Compatibility(Integer compatibilityScore, Integer friendId, Integer userId) {
+    public Compatibility(long compatibilityScore, Integer friendId, Integer userId) {
         this.compatibilityScore = compatibilityScore;
         this.friendId = friendId;
         this.userId = userId;
@@ -26,7 +26,7 @@ public class Compatibility {
      *
      * @return the compatibility score
      */
-    public Integer getCompatibilityScore() {
+    public long getCompatibilityScore() {
         return compatibilityScore;
     }
 
@@ -35,7 +35,7 @@ public class Compatibility {
      *
      * @param compatibilityScore the new compatibility score
      */
-    public void setCompatibilityScore(Integer compatibilityScore) {
+    public void setCompatibilityScore(long compatibilityScore) {
         this.compatibilityScore = compatibilityScore;
     }
 
