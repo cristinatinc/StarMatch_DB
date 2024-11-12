@@ -2,6 +2,10 @@ package model;
 
 import java.util.List;
 
+/**
+ * Represents an astrological star sign with a unique ID, name, element, and associated traits.
+ * Implements the {@link HasId} interface to provide an ID getter.
+ */
 public class StarSign implements HasId{
     private Integer id;
     private String starName;
