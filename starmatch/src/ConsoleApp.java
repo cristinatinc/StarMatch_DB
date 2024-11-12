@@ -126,7 +126,7 @@ public class ConsoleApp {
                 case "4" -> viewPersonalityTraits(userEmail);
                 case "5" -> viewPersonalizedQuote(userEmail);
                 case "6" -> manageFriendsMenu(scanner,userEmail);
-                case "7" -> System.out.println("Checking compatibility...");
+                case "7" -> viewCompatibility(scanner,userEmail);
                 default -> System.out.println("Invalid option. Please try again.");
             }
         }
@@ -515,6 +515,14 @@ public class ConsoleApp {
         catch (NoSuchElementException e){
             System.out.println(e.getMessage());
         }
+    }
+
+    private void viewCompatibility(Scanner scanner, String userEmail) {
+        viewFriends(userEmail);
+        System.out.println("Enter the email of the friend that you want to calculate your astrological compatibility with:");
+        String friendEmail = scanner.nextLine();
+        System.out.println("Your compatibility is:");
+        System.out.println(starMatchController.getCompatibility(userEmail,friendEmail) + "% compatible");
     }
 
     public static void main(String[] args) {

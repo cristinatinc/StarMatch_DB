@@ -5,6 +5,7 @@ import model.User;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class StarMatchController {
 
@@ -21,12 +22,18 @@ public class StarMatchController {
     }
 
     public void signUpNewUser(String name, LocalDate birthDate, LocalTime birthTime, String birthPlace, String email, String password) {
-        starMatchService.createUser(name, birthDate, birthTime, birthPlace, email, password);
+        if(starMatchService.validateEmail(email))
+            starMatchService.createUser(name, birthDate, birthTime, birthPlace, email, password);
+        else
+            throw new NoSuchElementException("Invalid email");
     }
 
     public void addNewAdmin(String name, String email, String password){
-        starMatchService.createAdmin(name, email, password);
-        System.out.println("Admin added successfully!");
+        if(starMatchService.validateEmail(email)){
+            starMatchService.createAdmin(name, email, password);
+            System.out.println("Admin added successfully!");}
+        else
+            throw new NoSuchElementException("Invalid email");
     }
 
     public void removeAdmin(Integer adminID){
@@ -35,8 +42,11 @@ public class StarMatchController {
     }
 
     public void updateAdmin(Integer adminID, String name, String email, String password){
-        starMatchService.updateAdmin(adminID, name, email, password);
-        System.out.println("Admin updated successfully!");
+        if(starMatchService.validateEmail(email)){
+            starMatchService.updateAdmin(adminID, name, email, password);
+            System.out.println("Admin updated successfully!");}
+        else
+            throw new NoSuchElementException("Invalid email");
     }
 
     public void viewAdmins(){
@@ -141,6 +151,11 @@ public class StarMatchController {
     public void removeFriend(String userEmail, String friendEmail){
         User user = starMatchService.getUserByEmail(userEmail);
         starMatchService.removeFriend(user,friendEmail);
+    }
+
+    public long getCompatibility(String userEmail, String friendEmail){
+        User user = starMatchService.getUserByEmail(userEmail);
+        return starMatchService.calculateCompatibility(user, friendEmail);
     }
 
 }
