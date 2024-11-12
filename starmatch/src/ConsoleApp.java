@@ -91,9 +91,12 @@ public class ConsoleApp {
         System.out.print("Place of birth: ");
         String placeOfBirth = scanner.nextLine();
 
+        try{
         starMatchController.signUpNewUser(name, LocalDate.parse(dateOfBirth), LocalTime.parse(timeOfBirth), placeOfBirth, email, password);
-
-        System.out.println("Sign-up successful! Welcome, " + name);
+        System.out.println("Sign-up successful! Welcome, " + name);}
+        catch (NoSuchElementException e) {
+            System.out.println(e.getMessage());
+        }
         userMenu(scanner, email);
     }
 
@@ -282,8 +285,12 @@ public class ConsoleApp {
         String email = scanner.nextLine();
         System.out.print("Password: ");
         String password = scanner.nextLine();
-
-        starMatchController.addNewAdmin(name, email, password);
+        try{
+            starMatchController.addNewAdmin(name, email, password);
+            System.out.println("Admin added.");}
+        catch (NoSuchElementException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     private void removeAdmin(Scanner scanner) {
@@ -309,7 +316,14 @@ public class ConsoleApp {
         System.out.print("New Password (leave blank to keep current): ");
         String password = scanner.nextLine();
 
-        starMatchController.updateAdmin(adminId, name, email, password);
+        try {
+            starMatchController.updateAdmin(adminId, name, email, password);
+            System.out.println("Admin updated.");
+        }
+        catch (NoSuchElementException e){
+            System.out.println(e.getMessage());
+        }
+
     }
 
     private void adminManageTraitsMenu(Scanner scanner) {
@@ -428,7 +442,13 @@ public class ConsoleApp {
         System.out.print("New Birth Place (leave blank to keep current): ");
         String birthPlace = scanner.nextLine();
 
-        starMatchController.updateUser(user,name,email,password,birthDate,birthTime,birthPlace);
+        try{
+            starMatchController.updateUser(user,name,email,password,birthDate,birthTime,birthPlace);
+            System.out.println("User updated");
+        }
+        catch (NoSuchElementException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     private void viewNatalChart(String userEmail) {
@@ -486,6 +506,7 @@ public class ConsoleApp {
     }
 
     public void addFriend(Scanner scanner, String userEmail) {
+        viewAllUsers(userEmail);
         System.out.println("Enter the email of the user you want to add as friend:");
         String friendEmail = scanner.nextLine();
         try{
@@ -522,7 +543,12 @@ public class ConsoleApp {
         System.out.println("Enter the email of the friend that you want to calculate your astrological compatibility with:");
         String friendEmail = scanner.nextLine();
         System.out.println("Your compatibility is:");
-        System.out.println(starMatchController.getCompatibility(userEmail,friendEmail) + "% compatible");
+        try{
+        Compatibility compatibility = starMatchController.getCompatibility(userEmail,friendEmail);
+        System.out.println(compatibility.getCompatibilityScore() + "% compatible");}
+        catch (NoSuchElementException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public static void main(String[] args) {
