@@ -12,6 +12,14 @@ public class StarSign implements HasId{
     private Element element;
     private List<Trait> traits;
 
+    /**
+     * Constructs a StarSign with the specified name, element, traits, and ID.
+     *
+     * @param starName the name of the star sign (e.g., "Aries", "Taurus")
+     * @param element  the element associated with the star sign (e.g., Fire, Earth)
+     * @param traits   a list of traits associated with the star sign
+     * @param id       the unique identifier for the star sign
+     */
     public StarSign(String starName, Element element, List<Trait> traits, Integer id) {
         this.starName = starName;
         this.element = element;
@@ -19,39 +27,84 @@ public class StarSign implements HasId{
         this.id = id;
     }
 
+    /**
+     * Gets the name of this star sign.
+     *
+     * @return the name of the star sign
+     */
     public String getStarName() {
         return starName;
     }
 
+    /**
+     * Sets the name of this star sign.
+     *
+     * @param starName the new name for this star sign
+     */
     public void setStarName(String starName) {
         this.starName = starName;
     }
 
+    /**
+     * Gets the element associated with this star sign.
+     *
+     * @return the element of the star sign
+     */
     public Element getElement() {
         return element;
     }
 
+    /**
+     * Sets the element associated with this star sign.
+     *
+     * @param element the new element for this star sign
+     */
     public void setElement(Element element) {
         this.element = element;
     }
 
+    /**
+     * Gets the list of traits associated with this star sign.
+     *
+     * @return a list of traits
+     */
     public List<Trait> getTraits() {
         return traits;
     }
 
+    /**
+     * Sets the list of traits for this star sign.
+     *
+     * @param traits the new list of traits for this star sign
+     */
     public void setTraits(List<Trait> traits) {
         this.traits = traits;
     }
 
+    /**
+     * Returns the unique ID of this star sign.
+     *
+     * @return the ID of the star sign
+     */
     @Override
     public Integer getId() {
         return id;
     }
 
+    /**
+     * Sets the unique ID for this star sign.
+     *
+     * @param id the new ID for the star sign
+     */
     public void setId(Integer id) {
         this.id = id;
     }
 
+    /**
+     * Returns a string representation of this star sign, including its ID, name, element, and traits.
+     *
+     * @return a string representation of the star sign
+     */
     @Override
     public String toString() {
         return "StarSign{" +
