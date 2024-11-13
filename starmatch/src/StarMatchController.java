@@ -64,6 +64,7 @@ public class StarMatchController {
 
     public void addNewQuote(String newQuote, String element){
         starMatchService.createQuote(newQuote, element);
+        System.out.println("Quote added successfully!");
     }
 
     public void removeQuote(Integer quoteID){

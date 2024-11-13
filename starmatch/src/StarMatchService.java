@@ -6,6 +6,10 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * StarMatchService provides methods for managing users, admins, quotes, traits, and compatibility calculations
+ * within the StarMatch application.
+ */
 public class StarMatchService {
     private final Repository<User> userRepository;
     private final Repository<Admin> adminRepository;
@@ -13,6 +17,9 @@ public class StarMatchService {
     private final Repository<Quote> quoteRepository;
     private final Repository<Trait> traitRepository;
 
+    /**
+     * Initializes StarMatchService with the given repositories.
+     */
     public StarMatchService(Repository<User> userRepository, Repository<Admin> adminRepository, Repository<StarSign> signRepository, Repository<Quote> quoteRepository, Repository<Trait> traitRepository) {
         this.userRepository = userRepository;
         this.adminRepository = adminRepository;
@@ -21,34 +28,63 @@ public class StarMatchService {
         this.traitRepository = traitRepository;
     }
 
+    /**
+     * Validates user login credentials.
+     *
+     * @param email    the user's email
+     * @param password the user's password
+     * @return true if login is valid, false otherwise
+     */
     public boolean validateUserLogin(String email, String password) {
         return userRepository.getAll().stream()
                 .anyMatch(user -> user.getEmail().equals(email) && user.getPassword().equals(password));
     }
 
+    /**
+     * Validates admin login credentials.
+     *
+     * @param email    the admin's email
+     * @param password the admin's password
+     * @return true if login is valid, false otherwise
+     */
     public boolean validateAdminLogin(String email, String password) {
         return adminRepository.getAll().stream()
                 .anyMatch(admin -> admin.getEmail().equals(email) && admin.getPassword().equals(password));
     }
 
+    /**
+     * Creates a new user and adds them to the user repository.
+     */
     public void createUser(String name, LocalDate birthDate, LocalTime birthTime, String birthPlace, String email, String password) {
         User newUser = new User(getMaxId(userRepository) + 1, name, birthDate, birthTime, birthPlace, email, password);
         userRepository.create(newUser);
     }
 
+    /**
+     * Removes a user by ID from the user repository.
+     */
     public void removeUser(Integer userId) {
         userRepository.delete(userId);
     }
 
+    /**
+     * Creates a new admin and adds them to the admin repository.
+     */
     public void createAdmin(String name, String email, String password) {
         Admin newAdmin = new Admin(getMaxId(adminRepository) + 1, name, email, password);
         adminRepository.create(newAdmin);
     }
 
+    /**
+     * Removes an admin by ID from the admin repository.
+     */
     public void removeAdmin(Integer adminId){
         adminRepository.delete(adminId);
     }
 
+    /**
+     * Updates admin information.
+     */
     public void updateAdmin(Integer adminId, String name, String email, String password) {
         Admin admin = adminRepository.get(adminId);
         if (!name.isBlank()) admin.setName(name);
@@ -57,6 +93,9 @@ public class StarMatchService {
         adminRepository.update(admin);
     }
 
+    /**
+     * Creates a new quote and adds it to the quote repository.
+     */
     public void createQuote(String newQuoteText, String element) {
         Element quoteElement = null;
         for (Element e : Element.values()) {
@@ -65,34 +104,44 @@ public class StarMatchService {
                 break;
             }
         }
-        if (quoteElement != null) {
-            Quote newQuote = new Quote(getMaxId(quoteRepository) + 1, quoteElement, newQuoteText);
-            quoteRepository.create(newQuote);
-            System.out.println("Quote added successfully!");
-        } else {
-            System.out.println("Invalid element specified. Quote not created.");
-        }
+        Quote newQuote = new Quote(getMaxId(quoteRepository) + 1, quoteElement, newQuoteText);
+        quoteRepository.create(newQuote);
     }
 
+    /**
+     * Removes a quote by ID from the quote repository.
+     */
     public void removeQuote(Integer quoteId) {
         quoteRepository.delete(quoteId);
     }
 
+    /**
+     * Updates a quote's text by its ID.
+     */
     public void updateQuote(Integer quoteId, String newQuoteText) {
         Quote quote = quoteRepository.get(quoteId);
         quote.setQuoteText(newQuoteText);
         quoteRepository.update(quote);
     }
 
+    /**
+     * Creates a new trait and adds it to the trait repository.
+     */
     public void createTrait(String traitName, Element element){
         Trait trait=new Trait(element,traitName,getMaxId(traitRepository)+1);
         traitRepository.create(trait);
     }
 
+    /**
+     * Removes a trait by ID from the trait repository.
+     */
     public void removeTrait(Integer traitId){
         traitRepository.delete(traitId);
     }
 
+    /**
+     * Updates a trait's information.
+     */
     public void updateTrait(Integer traitID, String traitName, Element element){
         Trait trait = traitRepository.get(traitID);
         if(!traitName.isBlank()) trait.setTraitName(traitName);
@@ -100,6 +149,13 @@ public class StarMatchService {
         traitRepository.update(trait);
     }
 
+    /**
+     * Retrieves the maximum ID from the given repository.
+     *
+     * @param repository the repository containing elements with IDs
+     * @param <T>        a type that implements the HasId interface
+     * @return the maximum ID found in the repository, or 0 if empty
+     */
     public <T extends HasId> int getMaxId(Repository<T> repository) {
         return repository.getAll().stream()
                 .mapToInt(T::getId)
@@ -107,8 +163,18 @@ public class StarMatchService {
                 .orElse(0);
     }
 
+    /**
+     * Retrieves a list of all admins.
+     *
+     * @return a list of all Admin objects
+     */
     public List<Admin> getAdmins() { return adminRepository.getAll();}
 
+    /**
+     * Retrieves a list of all users.
+     *
+     * @return a list of all User objects
+     */
     public List<User> getUsers() { return userRepository.getAll();}
 
     public List<Quote> getQuotes() { return quoteRepository.getAll();}
