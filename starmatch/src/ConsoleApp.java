@@ -11,10 +11,17 @@ import java.util.Scanner;
 public class ConsoleApp {
     private final StarMatchController starMatchController;
 
+    /**
+     * Contructor for intializing ConsoleApp
+     * @param starMatchController to interract with the controller
+     */
     public ConsoleApp(StarMatchController starMatchController) {
         this.starMatchController = starMatchController;
     }
 
+    /**
+     * Starts the console application and displays the main menu, allowing users to log in or sign up.
+     */
     public void start() {
         Scanner scanner = new Scanner(System.in);
         boolean continueLoop = true;
@@ -46,6 +53,11 @@ public class ConsoleApp {
         scanner.close();
     }
 
+    /**
+     * Handles the login process for a user.
+     *
+     * @param scanner The scanner instance to get user input.
+     */
     private void userLoginMenu(Scanner scanner) {
         System.out.println("-- User Log In --");
         System.out.print("Email: ");
@@ -61,6 +73,11 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * Handles the login process for an admin.
+     *
+     * @param scanner The scanner instance to get admin input.
+     */
     private void adminLoginMenu(Scanner scanner) {
         System.out.println("-- Admin Log In --");
         System.out.print("Email: ");
@@ -76,6 +93,11 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * Allows a new user to sign up with required details.
+     *
+     * @param scanner The scanner instance to get user input.
+     */
     private void userSignUpMenu(Scanner scanner) {
         System.out.println("-- User Sign Up --");
         System.out.print("Name: ");
@@ -100,6 +122,12 @@ public class ConsoleApp {
         userMenu(scanner, email);
     }
 
+    /**
+     * Displays the user dashboard with options for viewing and managing user data.
+     *
+     * @param scanner The scanner instance to get user input.
+     * @param userEmail The email of the currently logged-in user.
+     */
     private void userMenu(Scanner scanner, String userEmail) {
         boolean userLoop = true;
         while (userLoop) {
@@ -135,6 +163,11 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * Displays the admin dashboard with options for managing users, traits, quotes, and admins.
+     *
+     * @param scanner The scanner instance to get admin input.
+     */
     private void adminMenu(Scanner scanner) {
         boolean adminLoop = true;
         while (adminLoop) {
@@ -164,6 +197,11 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * Provides the admin with options for managing user accounts.
+     *
+     * @param scanner The scanner instance to get admin input.
+     */
     private void adminManageUserMenu(Scanner scanner) {
         boolean adminLoop = true;
         while (adminLoop) {
@@ -186,6 +224,11 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * Removes a user from the system.
+     *
+     * @param scanner The scanner used for reading input from the admin.
+     */
     private void removeUsers(Scanner scanner) {
         System.out.println("-- Remove Users --");
         starMatchController.viewUsers();
@@ -195,6 +238,11 @@ public class ConsoleApp {
         starMatchController.removeUser(Integer.valueOf(userID));
     }
 
+    /**
+     * Provides the admin with options for managing quotes.
+     *
+     * @param scanner The scanner instance to get admin input.
+     */
     private void adminManageQuotesMenu(Scanner scanner) {
         boolean adminLoop = true;
         while (adminLoop) {
@@ -221,6 +269,10 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * Adds a new quote based on a certain element
+     * @param scanner The scanner instance to get admin input.
+     */
     private void addNewQuote(Scanner scanner) {
         System.out.println("-- Add New Quote --");
         System.out.print("Enter the quote: ");
@@ -231,6 +283,10 @@ public class ConsoleApp {
         starMatchController.addNewQuote(newQuote, element);
     }
 
+    /**
+     * Removes a quote based on the ID
+     * @param scanner The scanner instance to get admin input.
+     */
     private void removeQuote(Scanner scanner) {
         System.out.println("-- Delete quote --");
         starMatchController.viewQuotes();
@@ -240,6 +296,10 @@ public class ConsoleApp {
         starMatchController.removeQuote(Integer.valueOf(quoteID));
     }
 
+    /**
+     * Updates a quotes based on the ID
+     * @param scanner The scanner instance to get admin input.
+     */
     private void updateQuote(Scanner scanner) {
         System.out.println("-- Update Quote --");
         starMatchController.viewQuotes();
@@ -251,6 +311,10 @@ public class ConsoleApp {
         starMatchController.updateQuote(Integer.valueOf(quoteID), quoteText);
     }
 
+    /**
+     * Admins can manage other admins
+     * @param scanner The scanner instance to get admin input.
+     */
     private void adminManageAdminMenu(Scanner scanner) {
         boolean adminLoop = true;
         while (adminLoop) {
@@ -277,6 +341,10 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * Adds a new admin
+     * @param scanner The scanner instance to get admin input.
+     */
     private void addNewAdmin(Scanner scanner) {
         System.out.println("-- Add New Admin --");
         System.out.print("Name: ");
@@ -293,6 +361,10 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * Removes an admin
+     * @param scanner The scanner instance to get admin input.
+     */
     private void removeAdmin(Scanner scanner) {
         System.out.println("-- Remove Admin --");
         starMatchController.viewAdmins();
@@ -302,6 +374,10 @@ public class ConsoleApp {
         starMatchController.removeAdmin(Integer.valueOf(adminID));
     }
 
+    /**
+     * Updates an admin's information
+     * @param scanner The scanner instance to get admin input.
+     */
     private void updateAdmin(Scanner scanner) {
         System.out.println("-- Update Existing Admin --");
         starMatchController.viewAdmins();
@@ -326,6 +402,10 @@ public class ConsoleApp {
 
     }
 
+    /**
+     * AAdmin can mnanage the traits of the signs.
+     * @param scanner The scanner instance to get admin input.
+     */
     private void adminManageTraitsMenu(Scanner scanner) {
         boolean adminLoop = true;
         while (adminLoop) {
@@ -352,6 +432,10 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * Adds a new trait based on a certain element
+     * @param scanner The scanner instance to get admin input.
+     */
     private void addNewTrait(Scanner scanner) {
         System.out.println("-- Add New Trait --");
         System.out.print("Enter the name of the trait: ");
@@ -368,6 +452,10 @@ public class ConsoleApp {
         starMatchController.addTrait(traitName,element);
     }
 
+    /**
+     * Removes a trait
+     * @param scanner The scanner instance to get admin input.
+     */
     private void removeTrait(Scanner scanner){
         System.out.println("-- Remove Trait --");
         starMatchController.viewTraits();
@@ -376,6 +464,10 @@ public class ConsoleApp {
         starMatchController.removeTrait(Integer.valueOf(traitID));
     }
 
+    /**
+     * Updates a traits
+     * @param scanner The scanner instance to get admin input.
+     */
     private void updateTrait(Scanner scanner){
         System.out.println("-- Update Existing Trait --");
         starMatchController.viewTraits();
@@ -397,6 +489,10 @@ public class ConsoleApp {
         starMatchController.updateTrait(Integer.valueOf(traitID),traitName,element);
     }
 
+    /**
+     * A user views its profile information
+     * @param userEmail The email of the currently logged-in user.
+     */
     private void viewUserProfile(String userEmail) {
         User user=starMatchController.viewUserProfile(userEmail);
         System.out.println("""
@@ -418,6 +514,11 @@ public class ConsoleApp {
                 Password:""" + user.getPassword());
     }
 
+    /**
+     * A user updates its information
+     * @param scanner The scanner instance to get user input.
+     * @param userEmail The email of the currently logged-in user.
+     */
     private void updateUserProfile(Scanner scanner, String userEmail){
         System.out.println("-- Update User Profile --");
         User user=starMatchController.viewUserProfile(userEmail);
@@ -451,6 +552,10 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * A user views its Natalchart
+     * @param userEmail The email of the currently logged-in user.
+     */
     private void viewNatalChart(String userEmail) {
         NatalChart natalChart = starMatchController.viewNatalChart(userEmail);
         if (natalChart != null) {
@@ -463,17 +568,30 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * A user views a list of the personality traits
+     * @param userEmail The email of the currently logged-in user.
+     */
     private void viewPersonalityTraits(String userEmail){
         List<String> traits=starMatchController.viewPersonalityTraits(userEmail);
         System.out.println("Your personality traits:");
         traits.forEach(System.out::println);
     }
 
+    /**
+     * A user views a personalized quote based on its natal chart
+     * @param userEmail The email of the currently logged-in user.
+     */
     private void viewPersonalizedQuote(String userEmail) {
         System.out.println("Your personalized quote:");
         System.out.println(starMatchController.getPersonalizedQuote(userEmail));
     }
 
+    /**
+     * Menu for the user to manage its friend list
+     * @param scanner The scanner instance to get user input
+     * @param userEmail The email of the currently logged-in user.
+     */
     private void manageFriendsMenu(Scanner scanner, String userEmail) {
         boolean friendLoop=true;
         while (friendLoop) {
@@ -499,12 +617,21 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * A user views all users except for himself
+     * @param userEmail The email of the currently logged-in user.
+     */
     private void viewAllUsers(String userEmail) {
         System.out.println("-- All Users --");
         List<User> allUsers = starMatchController.getAllUsersExcept(userEmail);
         allUsers.forEach(user -> System.out.println(user.getName() + " (" + user.getEmail() + ")"));
     }
 
+    /**
+     * A user adds a friend to his friend list
+     * @param userEmail The email of the currently logged-in user.
+     * @param scanner The scanner instance to get user input
+     */
     public void addFriend(Scanner scanner, String userEmail) {
         viewAllUsers(userEmail);
         System.out.println("Enter the email of the user you want to add as friend:");
@@ -517,6 +644,10 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * A user views its friend list
+     * @param userEmail The email of the currently logged-in user.
+     */
     public void viewFriends(String userEmail) {
         System.out.println("Your friends:");
         List<User> friends = starMatchController.viewFriends(userEmail);
@@ -526,6 +657,11 @@ public class ConsoleApp {
             friends.forEach(friend -> System.out.println(friend.getName() + " (" + friend.getEmail() + ")"));
     }
 
+    /**
+     * A user removes another user from his friend list
+     * @param userEmail The email of the currently logged-in user.
+     * @param scanner The scanner instance to get user input
+     */
     public void removeFriend(Scanner scanner, String userEmail) {
         viewFriends(userEmail);
         System.out.println("Enter the email of the user you want to remove as friend:");
@@ -538,6 +674,11 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * A user views its compatibility with a certain friend
+     * @param userEmail The email of the currently logged-in user.
+     * @param scanner The scanner instance to get user input
+     */
     private void viewCompatibility(Scanner scanner, String userEmail) {
         viewFriends(userEmail);
         System.out.println("Enter the email of the friend that you want to calculate your astrological compatibility with:");
@@ -551,6 +692,9 @@ public class ConsoleApp {
         }
     }
 
+    /**
+     * Main function where the inMemoryRepositories are intialized and the application starts
+     */
     public static void main(String[] args) {
         Repository<User> userRepository = createInMemoryUserRepository();
         Repository<Admin> adminRepository = createInMemoryAdminRepository();
@@ -565,6 +709,9 @@ public class ConsoleApp {
         consoleApp.start();
     }
 
+    /**
+     * User Repository
+     */
     private static Repository<User> createInMemoryUserRepository() {
         Repository<User> userRepository = new InMemoryRepository<>();
         userRepository.create(new User(1, "Amna", LocalDate.of(2000, 3, 12), LocalTime.of(9,0), "Romania", "amna@gmail.com", "parola"));
@@ -574,6 +721,9 @@ public class ConsoleApp {
         return userRepository;
     }
 
+    /**
+     * Admin Repository
+     */
     private static Repository<Admin> createInMemoryAdminRepository() {
         Repository<Admin> adminRepository = new InMemoryRepository<>();
         adminRepository.create(new Admin(1, "Bogdan Popa", "bogdan.popa@yahoo.com", "1234"));
@@ -581,6 +731,9 @@ public class ConsoleApp {
         return adminRepository;
     }
 
+    /**
+     * StarSign Repository
+     */
     private static Repository<StarSign> createInMemoryStarSignRepository() {
         Repository<StarSign> signRepository = new InMemoryRepository<>();
         Repository<Trait> traitRepository = createInMemoryTraitRepository();
@@ -609,6 +762,9 @@ public class ConsoleApp {
         return signRepository;
     }
 
+    /**
+     * Trait Repository
+     */
     private static Repository<Trait> createInMemoryTraitRepository(){
         Repository<Trait> traitRepository = new InMemoryRepository<>();
         Element fire = Element.Fire;
@@ -631,6 +787,9 @@ public class ConsoleApp {
         return traitRepository;
     }
 
+    /**
+     * Quote Repository
+     */
     private static Repository<Quote> createInMemoryQuoteRepository() {
         Repository<Quote> quoteRepository = new InMemoryRepository<>();
         Element fire = Element.Fire;
