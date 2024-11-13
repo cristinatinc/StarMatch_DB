@@ -177,10 +177,26 @@ public class StarMatchService {
      */
     public List<User> getUsers() { return userRepository.getAll();}
 
+    /**
+     * Retrieves a list of all quotes.
+     *
+     * @return a list of all Quote objects
+     */
     public List<Quote> getQuotes() { return quoteRepository.getAll();}
 
+    /**
+     * Retrieves a list of all traits.
+     *
+     * @return a list of all Trait objects
+     */
     public List<Trait> getTraits(){ return traitRepository.getAll();}
 
+    /**
+     * Retrieves a user by their email address.
+     *
+     * @param email the user's email address
+     * @return the User object if found, or null if not found
+     */
     public User getUserByEmail(String email) {
         return userRepository.getAll().stream()
                 .filter(user -> user.getEmail().equals(email))
@@ -188,6 +204,12 @@ public class StarMatchService {
                 .orElse(null);
     }
 
+    /**
+     * Generates a natal chart for a user, containing their sun, moon, and rising signs.
+     *
+     * @param user the user for whom the natal chart is generated
+     * @return a NatalChart object with the calculated planetary positions of the user
+     */
     public NatalChart getNatalChart(User user) {
 
         List<Planet> planets = new ArrayList<>();
@@ -205,6 +227,12 @@ public class StarMatchService {
         return new NatalChart(planets);
     }
 
+    /**
+     * Calculates the sun sign based on the user's birth date.
+     *
+     * @param birthDate the user's birth date
+     * @return the user's sun sign as a StarSign object
+     */
     private StarSign calculateSunSign(LocalDate birthDate) {
         int day = birthDate.getDayOfMonth();
         String sunSignName;
@@ -228,6 +256,12 @@ public class StarMatchService {
         return signRepository.getAll().stream().filter(starSign -> starSign.getStarName().equals(sunSignName)).findFirst().orElse(null);
     }
 
+    /**
+     * Calculates the moon sign based on the user's birth date.
+     *
+     * @param birthDate the user's birth date
+     * @return the user's moon sign as a StarSign object
+     */
     private StarSign calculateMoonSign(LocalDate birthDate){
         long daysSinceFixedDate = java.time.temporal.ChronoUnit.DAYS.between(
                 LocalDate.of(2000, 1, 1), birthDate);
@@ -238,6 +272,12 @@ public class StarMatchService {
         return signRepository.getAll().stream().filter(starSign -> starSign.getStarName().equals(moonSignName)).findFirst().orElse(null);
     }
 
+    /**
+     * Calculates the rising sign based on the user's birth time.
+     *
+     * @param birthTime the user's birth time
+     * @return the user's rising sign as a StarSign object
+     */
     private StarSign calculateRisingSign(LocalTime birthTime) {
         int hour = birthTime.getHour();
         int risingIndex = (hour / 2) % 12;
@@ -245,6 +285,12 @@ public class StarMatchService {
         return signRepository.getAll().stream().filter(starSign -> starSign.getStarName().equals(risingSign)).findFirst().orElse(null);
     }
 
+    /**
+     * Retrieves a zodiac sign based on its index in the zodiac cycle.
+     *
+     * @param index the index corresponding to a zodiac sign
+     * @return the name of the zodiac sign at the specified index
+     */
     private String getZodiacSignFromIndex(int index) {
         String[] zodiacSigns = {
                 "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
@@ -256,6 +302,12 @@ public class StarMatchService {
         return zodiacSigns[index];
     }
 
+    /**
+     * Retrieves a list of personality traits for a user based on their natal chart.
+     *
+     * @param user the user for whom personality traits are retrieved
+     * @return a list of personality trait names
+     */
     public List<String> getPersonalityTraits(User user){
         NatalChart chart=getNatalChart(user);
         StarSign sunSign=chart.getPlanets().getFirst().getSign();
@@ -264,6 +316,12 @@ public class StarMatchService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Generates a personalized quote for the user based on their sun sign's element.
+     *
+     * @param user the user for whom the quote is generated
+     * @return a random quote matching the user's element
+     */
     public String getPersonalizedQuote(User user){
         NatalChart chart=getNatalChart(user);
         Element element=chart.getPlanets().getFirst().getSign().getElement();
@@ -272,6 +330,9 @@ public class StarMatchService {
         return quotes.get(random.nextInt(quotes.size()));
     }
 
+    /**
+     * Updates a user's information with new details
+     */
     public void updateUser(User user,String name, String email, String password, LocalDate birthDate, LocalTime birthTime, String birthPlace){
         User user1 = userRepository.get(user.getId());
         if (!name.isBlank()) user1.setName(name);
@@ -283,26 +344,60 @@ public class StarMatchService {
         userRepository.update(user1);
     }
 
+    /**
+     * Retrieves all users except a specified user.
+     *
+     * @param currentUser the user to exclude from the list
+     * @return a list of users excluding the specified user
+     */
     public List<User> getAllUsersExcept(User currentUser){
         return userRepository.getAll().stream().filter(user -> !user.equals(currentUser)).collect(Collectors.toList());
     }
 
+    /**
+     * Adds a friend to the user's friend list by email.
+     *
+     * @param user the user adding a friend
+     * @param friendEmail the email of the friend to add
+     * @throws NoSuchElementException if a user with the specified email does not exist
+     */
     public void addFriend(User user, String friendEmail){
         User friend=userRepository.getAll().stream().filter(user1 -> user1.getEmail().equals(friendEmail)).findFirst().orElseThrow(() -> new NoSuchElementException("User with that email does not exist"));
         if(!user.getFriends().contains(friend))
             user.getFriends().add(friend);
     }
 
+    /**
+     * Retrieves a list of a user's friends.
+     *
+     * @param user the user whose friends are retrieved
+     * @return a list of User objects representing the user's friends
+     */
     public List<User> getFriends(User user){
         return user.getFriends();
     }
 
+    /**
+     * Removes a friend from the user's friend list by email.
+     *
+     * @param user the user removing a friend
+     * @param friendEmail the email of the friend to remove
+     * @throws NoSuchElementException if a user with the specified email does not exist
+     */
     public void removeFriend(User user, String friendEmail){
         User friend=userRepository.getAll().stream().filter(user1 -> user1.getEmail().equals(friendEmail)).findFirst().orElseThrow(() -> new NoSuchElementException("User with that email does not exist"));
         if(user.getFriends().contains(friend))
             user.getFriends().remove(friend);
     }
 
+    /**
+     * Calculates compatibility between a user and a friend.
+     *
+     * @param user the user for whom compatibility is calculated
+     * @param friendEmail the email of the friend to calculate compatibility with
+     * @return a Compatibility object with the calculated compatibility score
+     * @throws NoSuchElementException if the specified friend is not found or not in the user's friend list
+     */
     public Compatibility calculateCompatibility(User user, String friendEmail){
         User friend=userRepository.getAll().stream().filter(user1 -> user1.getEmail().equals(friendEmail)).findFirst().orElseThrow(() -> new NoSuchElementException("User with that email does not exist"));
         if(!user.getFriends().contains(friend))
@@ -329,6 +424,13 @@ public class StarMatchService {
         return new Compatibility(actualCompatibility,friend.getId(),user.getId());
     }
 
+    /**
+     * Checks if two elements are compatible for the actual calculation of the compatibility.
+     *
+     * @param userElement  the user's element
+     * @param friendElement the friend's element
+     * @return true if the elements are compatible, false otherwise
+     */
     private boolean checkElementCompatibility(Element userElement, Element friendElement){
         if (userElement.equals(friendElement))
             return true;
@@ -343,6 +445,12 @@ public class StarMatchService {
         return false;
     }
 
+    /**
+     * Converts the name of a star sign into a binary representation.
+     *
+     * @param starName the name of the star sign
+     * @return the binary representation of the star sign's name as a long
+     */
     private long convertNameToBinary(String starName){
         long binary=0;
         for(char c:starName.toCharArray()){
@@ -351,6 +459,14 @@ public class StarMatchService {
         return binary;
     }
 
+    /**
+     * Calculates a compatibility score between two star signs.
+     *
+     * @param userStarSign the user's star sign
+     * @param friendStarSign the friend's star sign
+     * @param compatible a boolean indicating if the elements are compatible
+     * @return the compatibility score as a long
+     */
     private long calculateBinaryCompatibility(StarSign userStarSign, StarSign friendStarSign, boolean compatible){
         long userStarNameBinary=convertNameToBinary(userStarSign.getStarName());
         long friendStarNameBinary=convertNameToBinary(friendStarSign.getStarName());
@@ -360,6 +476,12 @@ public class StarMatchService {
         return score;
     }
 
+    /**
+     * Validates an email address against a regular expression pattern.
+     *
+     * @param email the email address to validate
+     * @return true if the email is valid, false otherwise
+     */
     public boolean validateEmail(String email){
         String emailValid = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         return email != null && email.matches(emailValid);

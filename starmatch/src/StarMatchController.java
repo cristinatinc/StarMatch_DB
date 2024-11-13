@@ -8,20 +8,36 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * StarMatchController provides methods for interacting with the StarMatchService,
+ * handling user login, account management, and various astrological features.
+ */
 public class StarMatchController {
 
     private final StarMatchService starMatchService;
 
+    /**
+     * Constructor for the StarMatchController with the StarMatchService.
+     */
     public StarMatchController(StarMatchService starMatchService) {this.starMatchService=starMatchService;}
 
+    /**
+     * Validates user Login using function in service.
+     */
     public boolean handleUserLogin(String email, String password) {
         return starMatchService.validateUserLogin(email, password);
     }
 
+    /**
+     * Validates admin Login using function in service.
+     */
     public boolean handleAdminLogin(String email, String password) {
         return starMatchService.validateAdminLogin(email, password);
     }
 
+    /**
+     * Registers a new user if the email is valid
+     */
     public void signUpNewUser(String name, LocalDate birthDate, LocalTime birthTime, String birthPlace, String email, String password) {
         if(starMatchService.validateEmail(email))
             starMatchService.createUser(name, birthDate, birthTime, birthPlace, email, password);
@@ -29,6 +45,9 @@ public class StarMatchController {
             throw new NoSuchElementException("Invalid email");
     }
 
+    /**
+     * Adds a new admin if the email is valid
+     */
     public void addNewAdmin(String name, String email, String password){
         if(starMatchService.validateEmail(email)){
             starMatchService.createAdmin(name, email, password);
@@ -37,11 +56,17 @@ public class StarMatchController {
             throw new NoSuchElementException("Invalid email");
     }
 
+    /**
+    * Removes an admin by ID.
+    */
     public void removeAdmin(Integer adminID){
         starMatchService.removeAdmin(adminID);
         System.out.println("Removed admin with ID " + adminID);
     }
 
+    /**
+    * Updates an admin's information if the email is valid.
+    */
     public void updateAdmin(Integer adminID, String name, String email, String password){
         if(starMatchService.validateEmail(email)){
             starMatchService.updateAdmin(adminID, name, email, password);
@@ -50,62 +75,98 @@ public class StarMatchController {
             throw new NoSuchElementException("Invalid email");
     }
 
+    /**
+     * Displays all admins.
+     */
     public void viewAdmins(){
         StringBuilder output = new StringBuilder("Admins of the app:\n");
         starMatchService.getAdmins().forEach(admin -> output.append(admin.toString()).append("\n"));
         System.out.println(output);
     }
 
+    /**
+     * Displays all quotes.
+     */
     public void viewQuotes(){
         StringBuilder output = new StringBuilder("Quotes:\n");
         starMatchService.getQuotes().forEach(quote -> output.append(quote.toString()).append("\n"));
         System.out.println(output);
     }
 
+    /**
+     * Adds a new quote associated with a specified element.
+     */
     public void addNewQuote(String newQuote, String element){
         starMatchService.createQuote(newQuote, element);
         System.out.println("Quote added successfully!");
     }
 
+    /**
+     * Removes a quote by its ID.
+     */
     public void removeQuote(Integer quoteID){
         starMatchService.removeQuote(quoteID);
         System.out.println("Quote removed successfully!");
     }
 
+    /**
+     * Updates the text of a quote by ID.
+     */
     public void updateQuote(Integer quoteID, String quoteText){
         starMatchService.updateQuote(quoteID, quoteText);
         System.out.println("Quote updated successfully!");
     }
 
+    /**
+     * Displays all traits.
+     */
     public void viewTraits(){
         StringBuilder output = new StringBuilder("Traits:\n");
         starMatchService.getTraits().forEach(trait -> output.append(trait.toString()).append("\n"));
         System.out.println(output);
     }
 
+    /**
+     * Adds a new traits.
+     */
     public void addTrait(String traitName, Element element){
         starMatchService.createTrait(traitName,element);
     }
 
+    /**
+     * Removes a trait by its ID.
+     */
     public void removeTrait(Integer traitID){
         starMatchService.removeTrait(traitID);
     }
 
+    /**
+     * Updates a trait by its ID.
+     */
     public void updateTrait(Integer traitID, String traitName, Element element){
         starMatchService.updateTrait(traitID,traitName,element);
     }
 
+    /**
+     * Displays all Users.
+     */
     public void viewUsers(){
         StringBuilder output = new StringBuilder("User profile:\n");
         starMatchService.getUsers().forEach(user -> output.append(user.toString()).append("\n"));
         System.out.println(output);
     }
 
+    /**
+     * Removes a user by its ID.
+     */
     public void removeUser(Integer userID){
         starMatchService.removeUser(userID);
         System.out.println("Removed user with ID " + userID);
     }
 
+    /**
+     * Retrieves and returns a user's natal chart.
+     */
     public NatalChart viewNatalChart(String userEmail){
         User user = starMatchService.getUserByEmail(userEmail);
         if (user != null) {
@@ -116,20 +177,33 @@ public class StarMatchController {
         }
     }
 
+    /**
+     * Retrieves and returns a user's profile by email.
+     */
     public User viewUserProfile(String userEmail){
         return starMatchService.getUserByEmail(userEmail);
     }
 
+    /**
+     * Retrieves and returns a user's personality traits.
+     */
     public List<String> viewPersonalityTraits(String userEmail){
         User user = starMatchService.getUserByEmail(userEmail);
         return starMatchService.getPersonalityTraits(user);
     }
 
+    /**
+     * Retrieves and returns a user's personalized quote.
+     */
     public String getPersonalizedQuote(String userEmail){
         User user = starMatchService.getUserByEmail(userEmail);
         return starMatchService.getPersonalizedQuote(user);
     }
 
+    /**
+     * Updates a user's profile information with new details
+     * throws exception if the email is invalid
+     */
     public void updateUser(User user, String name, String email, String password, LocalDate birthDate, LocalTime birthTime, String birthPlace){
         if(starMatchService.validateEmail(email)){
         User user1=starMatchService.getUserByEmail(user.getEmail());
@@ -138,26 +212,42 @@ public class StarMatchController {
             throw new NoSuchElementException("Invalid email");
     }
 
+    /**
+     * Retrieves all users except the specified user.
+     */
     public List<User> getAllUsersExcept(String userEmail){
         User currentUser = starMatchService.getUserByEmail(userEmail);
         return starMatchService.getAllUsersExcept(currentUser);
     }
 
+    /**
+     * Adds a friend to the user's friend list by email.
+     */
     public void addFriend(String userEmail, String friendEmail){
         User user = starMatchService.getUserByEmail(userEmail);
         starMatchService.addFriend(user,friendEmail);
     }
 
+    /**
+     * Retrieves a user's friend list.
+     */
     public List<User> viewFriends(String userEmail){
         User user = starMatchService.getUserByEmail(userEmail);
         return starMatchService.getFriends(user);
     }
 
+    /**
+     * Removes a friend from the user's friend list.
+     */
     public void removeFriend(String userEmail, String friendEmail){
         User user = starMatchService.getUserByEmail(userEmail);
         starMatchService.removeFriend(user,friendEmail);
     }
 
+    /**
+     * Calculates compatibility between the user and a friend.
+     * @return a Compatibility object
+     */
     public Compatibility getCompatibility(String userEmail, String friendEmail){
         User user = starMatchService.getUserByEmail(userEmail);
         return starMatchService.calculateCompatibility(user, friendEmail);
