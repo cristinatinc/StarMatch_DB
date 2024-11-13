@@ -12,15 +12,15 @@ public class ConsoleApp {
     private final StarMatchController starMatchController;
 
     /**
-     * Contructor for intializing ConsoleApp
-     * @param starMatchController to interract with the controller
+     * Constructor for initializing ConsoleApp with the StarMatchController
+     * @param starMatchController to interact with the controller
      */
     public ConsoleApp(StarMatchController starMatchController) {
         this.starMatchController = starMatchController;
     }
 
     /**
-     * Starts the console application and displays the main menu, allowing users to log in or sign up.
+     * Starts the console application and displays the main menu, allowing users to log in or sign up and admins to log in.
      */
     public void start() {
         Scanner scanner = new Scanner(System.in);
@@ -55,7 +55,6 @@ public class ConsoleApp {
 
     /**
      * Handles the login process for a user.
-     *
      * @param scanner The scanner instance to get user input.
      */
     private void userLoginMenu(Scanner scanner) {
@@ -75,7 +74,6 @@ public class ConsoleApp {
 
     /**
      * Handles the login process for an admin.
-     *
      * @param scanner The scanner instance to get admin input.
      */
     private void adminLoginMenu(Scanner scanner) {
@@ -95,7 +93,6 @@ public class ConsoleApp {
 
     /**
      * Allows a new user to sign up with required details.
-     *
      * @param scanner The scanner instance to get user input.
      */
     private void userSignUpMenu(Scanner scanner) {
@@ -123,8 +120,7 @@ public class ConsoleApp {
     }
 
     /**
-     * Displays the user dashboard with options for viewing and managing user data.
-     *
+     * Displays the user dashboard with options for using the application.
      * @param scanner The scanner instance to get user input.
      * @param userEmail The email of the currently logged-in user.
      */
@@ -165,7 +161,6 @@ public class ConsoleApp {
 
     /**
      * Displays the admin dashboard with options for managing users, traits, quotes, and admins.
-     *
      * @param scanner The scanner instance to get admin input.
      */
     private void adminMenu(Scanner scanner) {
@@ -198,8 +193,7 @@ public class ConsoleApp {
     }
 
     /**
-     * Provides the admin with options for managing user accounts.
-     *
+     * Provides the admin with options for managing user accounts, viewing and deleting.
      * @param scanner The scanner instance to get admin input.
      */
     private void adminManageUserMenu(Scanner scanner) {
@@ -226,7 +220,6 @@ public class ConsoleApp {
 
     /**
      * Removes a user from the system.
-     *
      * @param scanner The scanner used for reading input from the admin.
      */
     private void removeUsers(Scanner scanner) {
@@ -240,7 +233,6 @@ public class ConsoleApp {
 
     /**
      * Provides the admin with options for managing quotes.
-     *
      * @param scanner The scanner instance to get admin input.
      */
     private void adminManageQuotesMenu(Scanner scanner) {
@@ -312,7 +304,7 @@ public class ConsoleApp {
     }
 
     /**
-     * Admins can manage other admins
+     * Provides the admin with options for managing other admins.
      * @param scanner The scanner instance to get admin input.
      */
     private void adminManageAdminMenu(Scanner scanner) {
@@ -342,7 +334,7 @@ public class ConsoleApp {
     }
 
     /**
-     * Adds a new admin
+     * Adds a new admin to the system.
      * @param scanner The scanner instance to get admin input.
      */
     private void addNewAdmin(Scanner scanner) {
@@ -362,7 +354,7 @@ public class ConsoleApp {
     }
 
     /**
-     * Removes an admin
+     * Removes an admin from the system.
      * @param scanner The scanner instance to get admin input.
      */
     private void removeAdmin(Scanner scanner) {
@@ -375,7 +367,7 @@ public class ConsoleApp {
     }
 
     /**
-     * Updates an admin's information
+     * Updates an admins information.
      * @param scanner The scanner instance to get admin input.
      */
     private void updateAdmin(Scanner scanner) {
@@ -403,7 +395,7 @@ public class ConsoleApp {
     }
 
     /**
-     * AAdmin can mnanage the traits of the signs.
+     * Provides the admin with options for managing the traits of the signs.
      * @param scanner The scanner instance to get admin input.
      */
     private void adminManageTraitsMenu(Scanner scanner) {
@@ -433,7 +425,7 @@ public class ConsoleApp {
     }
 
     /**
-     * Adds a new trait based on a certain element
+     * Adds a new trait based on a certain element.
      * @param scanner The scanner instance to get admin input.
      */
     private void addNewTrait(Scanner scanner) {
@@ -453,7 +445,7 @@ public class ConsoleApp {
     }
 
     /**
-     * Removes a trait
+     * Removes a trait from the system.
      * @param scanner The scanner instance to get admin input.
      */
     private void removeTrait(Scanner scanner){
@@ -465,7 +457,7 @@ public class ConsoleApp {
     }
 
     /**
-     * Updates a traits
+     * Updates a trait.
      * @param scanner The scanner instance to get admin input.
      */
     private void updateTrait(Scanner scanner){
@@ -490,7 +482,7 @@ public class ConsoleApp {
     }
 
     /**
-     * A user views its profile information
+     * A user views its profile information.
      * @param userEmail The email of the currently logged-in user.
      */
     private void viewUserProfile(String userEmail) {
@@ -515,7 +507,7 @@ public class ConsoleApp {
     }
 
     /**
-     * A user updates its information
+     * A user updates its information.
      * @param scanner The scanner instance to get user input.
      * @param userEmail The email of the currently logged-in user.
      */
@@ -553,7 +545,7 @@ public class ConsoleApp {
     }
 
     /**
-     * A user views its Natalchart
+     * A user views its Natalchart.
      * @param userEmail The email of the currently logged-in user.
      */
     private void viewNatalChart(String userEmail) {
@@ -569,7 +561,7 @@ public class ConsoleApp {
     }
 
     /**
-     * A user views a list of the personality traits
+     * A user views a list of the personality traits based on its Natalchart.
      * @param userEmail The email of the currently logged-in user.
      */
     private void viewPersonalityTraits(String userEmail){
@@ -579,7 +571,7 @@ public class ConsoleApp {
     }
 
     /**
-     * A user views a personalized quote based on its natal chart
+     * A user views a personalized quote based on its Natalchart.
      * @param userEmail The email of the currently logged-in user.
      */
     private void viewPersonalizedQuote(String userEmail) {
@@ -588,8 +580,8 @@ public class ConsoleApp {
     }
 
     /**
-     * Menu for the user to manage its friend list
-     * @param scanner The scanner instance to get user input
+     * Provides the user with options for managing friends.
+     * @param scanner The scanner instance to get user input.
      * @param userEmail The email of the currently logged-in user.
      */
     private void manageFriendsMenu(Scanner scanner, String userEmail) {
@@ -618,7 +610,7 @@ public class ConsoleApp {
     }
 
     /**
-     * A user views all users except for himself
+     * A user views all users except for itself.
      * @param userEmail The email of the currently logged-in user.
      */
     private void viewAllUsers(String userEmail) {
@@ -628,9 +620,9 @@ public class ConsoleApp {
     }
 
     /**
-     * A user adds a friend to his friend list
+     * A user adds a friend to its friend list.
      * @param userEmail The email of the currently logged-in user.
-     * @param scanner The scanner instance to get user input
+     * @param scanner The scanner instance to get user input.
      */
     public void addFriend(Scanner scanner, String userEmail) {
         viewAllUsers(userEmail);
@@ -645,7 +637,7 @@ public class ConsoleApp {
     }
 
     /**
-     * A user views its friend list
+     * A user views its friend list.
      * @param userEmail The email of the currently logged-in user.
      */
     public void viewFriends(String userEmail) {
@@ -658,9 +650,9 @@ public class ConsoleApp {
     }
 
     /**
-     * A user removes another user from his friend list
+     * A user removes another user from its friend list.
      * @param userEmail The email of the currently logged-in user.
-     * @param scanner The scanner instance to get user input
+     * @param scanner The scanner instance to get user input.
      */
     public void removeFriend(Scanner scanner, String userEmail) {
         viewFriends(userEmail);
@@ -675,9 +667,9 @@ public class ConsoleApp {
     }
 
     /**
-     * A user views its compatibility with a certain friend
+     * A user views its compatibility with a certain friend.
      * @param userEmail The email of the currently logged-in user.
-     * @param scanner The scanner instance to get user input
+     * @param scanner The scanner instance to get user input.
      */
     private void viewCompatibility(Scanner scanner, String userEmail) {
         viewFriends(userEmail);
@@ -693,7 +685,7 @@ public class ConsoleApp {
     }
 
     /**
-     * Main function where the inMemoryRepositories are intialized and the application starts
+     * Main function where the inMemoryRepositories are initialized and the application starts.
      */
     public static void main(String[] args) {
         Repository<User> userRepository = createInMemoryUserRepository();
@@ -710,7 +702,7 @@ public class ConsoleApp {
     }
 
     /**
-     * User Repository
+     * User InMemoryRepository
      */
     private static Repository<User> createInMemoryUserRepository() {
         Repository<User> userRepository = new InMemoryRepository<>();
@@ -722,7 +714,7 @@ public class ConsoleApp {
     }
 
     /**
-     * Admin Repository
+     * Admin InMemoryRepository
      */
     private static Repository<Admin> createInMemoryAdminRepository() {
         Repository<Admin> adminRepository = new InMemoryRepository<>();
@@ -732,7 +724,7 @@ public class ConsoleApp {
     }
 
     /**
-     * StarSign Repository
+     * StarSign InMemoryRepository
      */
     private static Repository<StarSign> createInMemoryStarSignRepository() {
         Repository<StarSign> signRepository = new InMemoryRepository<>();
@@ -763,7 +755,7 @@ public class ConsoleApp {
     }
 
     /**
-     * Trait Repository
+     * Trait InMemoryRepository
      */
     private static Repository<Trait> createInMemoryTraitRepository(){
         Repository<Trait> traitRepository = new InMemoryRepository<>();
@@ -788,7 +780,7 @@ public class ConsoleApp {
     }
 
     /**
-     * Quote Repository
+     * Quote InMemoryRepository
      */
     private static Repository<Quote> createInMemoryQuoteRepository() {
         Repository<Quote> quoteRepository = new InMemoryRepository<>();
