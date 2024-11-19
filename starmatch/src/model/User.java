@@ -3,7 +3,9 @@ package model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents a user with personal details, login information, and a list of friends.
@@ -14,6 +16,7 @@ public class User extends Person {
     private String email;
     private String password;
     private List<User> friends;
+    private List<String> rawFriendEmails;
 
     /**
      * Constructs a User with the specified details and initializes an empty friends list.
@@ -30,7 +33,8 @@ public class User extends Person {
         super(id, name, birthDate, birthTime, birthPlace);
         this.email = email;
         this.password = password;
-        this.friends = new ArrayList<User>();
+        this.friends = new ArrayList<>();
+        this.rawFriendEmails = new ArrayList<>();
     }
 
     /**
@@ -84,7 +88,7 @@ public class User extends Person {
      * @param friends the new list of friends for the user
      */
     public void setFriends(List<User> friends) {
-        this.friends = friends;
+        this.friends = new ArrayList<>(friends);
     }
 
     /**
@@ -114,8 +118,14 @@ public class User extends Person {
      */
     @Override
     public String convertObjectToLine() {
-        return this.id + "," + this.name + "," + this.email + "," + this.password + "," + this.birthDate + "," + this.birthTime + "," + this.birthPlace;
+        String friendsEmails = friends.stream()
+                .map(User::getEmail)
+                .collect(Collectors.joining(","));
+
+        return id + "," + name + "," + email + "," + password + "," + birthDate + "," +
+                birthTime + "," + birthPlace + "," + friendsEmails;
     }
+
 
     /**
      * Creates a User object from the given fields in a text file line.
@@ -125,15 +135,30 @@ public class User extends Person {
      */
 
     public static User createObjectFromFields(String[] fields) {
-        Integer id = Integer.valueOf(fields[0]);
+        Integer id = Integer.parseInt(fields[0]);
         String name = fields[1];
-        LocalDate birthDate = LocalDate.parse(fields[2]);
-        LocalTime time = LocalTime.parse(fields[3]);
-        String country = fields[4];
-        String email = fields[5];
-        String password = fields[6];
+        String email = fields[2];
+        String password = fields[3];
+        LocalDate birthDate = LocalDate.parse(fields[4]);
+        LocalTime birthTime = LocalTime.parse(fields[5]);
+        String birthPlace = fields[6];
 
-        return new User(id, name, birthDate, time, country, email, password);
+        User user = new User(id, name, birthDate, birthTime, birthPlace, email, password);
+
+        if (fields.length > 7 && !fields[7].isEmpty()) {
+            String[] friendEmails = fields[7].split(",");
+            user.setRawFriendEmails(new ArrayList<>(List.of(friendEmails))); // New field in `User` for temporary storage
+        }
+
+        return user;
     }
 
+
+    public List<String> getRawFriendEmails() {
+        return rawFriendEmails;
+    }
+
+    public void setRawFriendEmails(List<String> rawFriendEmails) {
+        this.rawFriendEmails = new ArrayList<>(rawFriendEmails);
+    }
 }

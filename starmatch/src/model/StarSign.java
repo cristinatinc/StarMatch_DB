@@ -135,9 +135,10 @@ public class StarSign implements HasId{
         Integer id = Integer.parseInt(fields[0]);
         String starName = fields[1];
         Element element = Element.valueOf(fields[2]);
-        List<Trait> traits = List.of(fields[3].split(",")).stream()
-                .map(traitName -> new Trait(element, traitName, null))
+        List<Trait> traits = Arrays.stream(fields, 3, fields.length)
+                .map(traitName -> new Trait(element, traitName.trim(), null)) // Trim to avoid spacing issues
                 .collect(Collectors.toList());
+
         return new StarSign(starName, element, traits, id);
     }
 }

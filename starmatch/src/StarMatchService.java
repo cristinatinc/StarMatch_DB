@@ -361,10 +361,19 @@ public class StarMatchService {
      * @param friendEmail the email of the friend to add
      * @throws NoSuchElementException if a user with the specified email does not exist
      */
-    public void addFriend(User user, String friendEmail){
-        User friend=userRepository.getAll().stream().filter(user1 -> user1.getEmail().equals(friendEmail)).findFirst().orElseThrow(() -> new NoSuchElementException("User with that email does not exist"));
-        if(!user.getFriends().contains(friend))
+    public void addFriend(User user, String friendEmail) {
+        User friend = userRepository.getAll().stream()
+                .filter(user1 -> user1.getEmail().equals(friendEmail))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("User with that email does not exist"));
+
+        if (!user.getFriends().contains(friend) && !user.getRawFriendEmails().contains(friendEmail)) {
             user.getFriends().add(friend);
+            user.getRawFriendEmails().add(friendEmail);
+
+            // Update the user in the repository to save changes
+            userRepository.update(user);
+        }
     }
 
     /**
@@ -373,9 +382,13 @@ public class StarMatchService {
      * @param user the user whose friends are retrieved
      * @return a list of User objects representing the user's friends
      */
-    public List<User> getFriends(User user){
-        return user.getFriends();
+    public List<String> getFriends(User user){
+//        refreshFriendsList(user);
+//        return user.getFriends();
+        return user.getRawFriendEmails();
     }
+
+
 
     /**
      * Removes a friend from the user's friend list by email.
@@ -384,10 +397,19 @@ public class StarMatchService {
      * @param friendEmail the email of the friend to remove
      * @throws NoSuchElementException if a user with the specified email does not exist
      */
-    public void removeFriend(User user, String friendEmail){
-        User friend=userRepository.getAll().stream().filter(user1 -> user1.getEmail().equals(friendEmail)).findFirst().orElseThrow(() -> new NoSuchElementException("User with that email does not exist"));
-        if(user.getFriends().contains(friend))
+    public void removeFriend(User user, String friendEmail) {
+        User friend = userRepository.getAll().stream()
+                .filter(user1 -> user1.getEmail().equals(friendEmail))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("User with that email does not exist"));
+
+        if (user.getFriends().contains(friend) && !user.getRawFriendEmails().contains(friendEmail)) {
             user.getFriends().remove(friend);
+            user.getRawFriendEmails().remove(friendEmail);
+
+            // Update the user in the repository to save changes
+            userRepository.update(user);
+        }
     }
 
     /**
@@ -400,7 +422,7 @@ public class StarMatchService {
      */
     public Compatibility calculateCompatibility(User user, String friendEmail){
         User friend=userRepository.getAll().stream().filter(user1 -> user1.getEmail().equals(friendEmail)).findFirst().orElseThrow(() -> new NoSuchElementException("User with that email does not exist"));
-        if(!user.getFriends().contains(friend))
+        if(!user.getFriends().contains(friend) && !user.getRawFriendEmails().contains(friendEmail))
             throw new NoSuchElementException("That User is not your friend");
 
         NatalChart chartUser=getNatalChart(user);

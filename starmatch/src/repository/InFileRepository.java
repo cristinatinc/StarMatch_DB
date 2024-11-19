@@ -4,7 +4,8 @@ import java.io.*;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Consumer;
-import model.HasId;
+
+import model.*;
 
 public class InFileRepository<T extends HasId> implements Repository<T> {
     private final String filePath;
@@ -79,19 +80,60 @@ public class InFileRepository<T extends HasId> implements Repository<T> {
      */
     private Map<Integer, T> readDataFromFile() {
         Map<Integer, T> data = new HashMap<>();
+        File file = new File(filePath);
+
+        if (!file.exists() || file.length() == 0) {
+            // Return empty data if the file doesn't exist or is empty
+            return data;
+        }
+
+        List<User> allUsers = new ArrayList<>();
+
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(",");
-                Integer id = Integer.valueOf(fields[0]);
-                T obj = createObjectFromFields(fields);
-                if (obj != null) {
-                    data.put(id, obj);
+                if (fields.length == 0 || fields[0].isEmpty()) {
+                    System.err.println("Skipping invalid line: " + line);
+                    continue;
+                }
+
+                try {
+                    Integer id = Integer.parseInt(fields[0]);
+                    T obj = createObjectFromFields(fields);
+                    if (obj != null) {
+                        data.put(id, obj);
+                    }
+
+                    if (obj instanceof User user) {
+                        allUsers.add(user);
+                    }
+
+                } catch (NumberFormatException e) {
+                    System.err.println("Invalid ID format in line: " + line);
+                } catch (Exception e) {
+                    System.err.println("Error creating object from fields: " + Arrays.toString(fields));
+                    e.printStackTrace();
                 }
             }
         } catch (IOException e) {
+            System.err.println("Error reading from file: " + filePath);
             e.printStackTrace();
         }
+
+        if (entityClass.getSimpleName().equals("User")) {
+            for (User user : allUsers) {
+                List<User> resolvedFriends = user.getRawFriendEmails().stream()
+                        .map(email -> allUsers.stream()
+                                .filter(u -> u.getEmail().equals(email))
+                                .findFirst()
+                                .orElse(null))
+                        .filter(Objects::nonNull)
+                        .toList();
+                user.setFriends(resolvedFriends);
+            }
+        }
+
         return data;
     }
 
@@ -108,6 +150,7 @@ public class InFileRepository<T extends HasId> implements Repository<T> {
                 bw.newLine();
             }
         } catch (IOException e) {
+            System.err.println("Error writing to file: " + filePath);
             e.printStackTrace();
         }
     }
@@ -131,10 +174,16 @@ public class InFileRepository<T extends HasId> implements Repository<T> {
      */
     private T createObjectFromFields(String[] fields) {
         try {
-            // Assuming the class implements a static createObjectFromFields method
-            Method method = entityClass.getMethod("createObjectFromFields", String[].class);
-            return (T) method.invoke(null, (Object) fields); // Invoke the method using reflection
+            return switch (entityClass.getSimpleName()) {
+                case "User" -> (T) User.createObjectFromFields(fields);
+                case "Quote" -> (T) Quote.createObjectFromFields(fields);
+                case "StarSign" -> (T) StarSign.createObjectFromFields(fields);
+                case "Admin" -> (T) Admin.createObjectFromFields(fields);
+                case "Trait" -> (T) Trait.createObjectFromFields(fields);
+                default -> null;
+            };
         } catch (Exception e) {
+            System.err.println("Error invoking createObjectFromFields for class: " + entityClass.getName());
             e.printStackTrace();
             return null;
         }
