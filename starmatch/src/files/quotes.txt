@@ -1,0 +1,16 @@
+1,Fire,The only trip you will regret is the one you don’t take.
+2,Fire,Adventure is worthwhile in itself.
+3,Fire,Life begins at the end of your comfort zone.
+4,Fire,Free spirits don't ask for permission.
+5,Water,Normal is nothing more than a cycle on a washing machine.
+6,Water,The great gift of human beings is that we have the power of empathy.
+7,Water,To be rude to someone is not my nature.
+8,Water,Learn as much from joy as you do from pain.
+9,Air,That was her gift. She filled you with words you didn’t know were there.
+10,Air,I feel like I'm too busy writing history to read it.
+11,Air,Identify with everything. Align with nothing.
+12,Air,Everything in the universe is within you. Ask all from yourself.
+13,Earth,Empty yourself and let the universe fill you.
+14,Earth,Fall seven times, stand up eight.
+15,Earth,I have standards I don’t plan on lowering for anybody, including myself.
+16,Earth,Be easily awed, not easily impressed.

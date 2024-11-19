@@ -1,32 +1,24 @@
 package repository;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.lang.reflect.Method;
+import java.util.*;
 import java.util.function.Consumer;
-
 import model.HasId;
 
-/**
- * A repository implementation that stores data in a file.
- *
- * @param <T> The type of objects stored in the repository, which must implement HasId.
- */
 public class InFileRepository<T extends HasId> implements Repository<T> {
     private final String filePath;
+    private final Class<T> entityClass;
 
     /**
      * Constructs a new FileRepository with the specified file path.
      *
      * @param filePath The path to the file where data will be stored.
+     * @param entityClass The class type of T, used for reflection.
      */
-    public InFileRepository(String filePath) {
+    public InFileRepository(String filePath, Class<T> entityClass) {
         this.filePath = filePath;
+        this.entityClass = entityClass;
     }
 
     /**
@@ -66,7 +58,7 @@ public class InFileRepository<T extends HasId> implements Repository<T> {
      */
     @Override
     public List<T> getAll() {
-        return readDataFromFile().values().stream().toList();
+        return new ArrayList<>(readDataFromFile().values());
     }
 
     /**
@@ -86,11 +78,21 @@ public class InFileRepository<T extends HasId> implements Repository<T> {
      * @return The data stored in the file, or an empty map if the file is empty or does not exist.
      */
     private Map<Integer, T> readDataFromFile() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
-            return (Map<Integer, T>) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            return new HashMap<>();
+        Map<Integer, T> data = new HashMap<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] fields = line.split(",");
+                Integer id = Integer.valueOf(fields[0]);
+                T obj = createObjectFromFields(fields);
+                if (obj != null) {
+                    data.put(id, obj);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return data;
     }
 
     /**
@@ -99,10 +101,42 @@ public class InFileRepository<T extends HasId> implements Repository<T> {
      * @param data The data to write to the file.
      */
     private void writeDataToFile(Map<Integer, T> data) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
-            oos.writeObject(data);
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+            for (T obj : data.values()) {
+                String line = convertObjectToLine(obj);
+                bw.write(line);
+                bw.newLine();
+            }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Converts an object to a CSV line using the object's own method.
+     *
+     * @param obj The object to convert.
+     * @return The CSV line representation of the object.
+     */
+    private String convertObjectToLine(T obj) {
+        return obj.convertObjectToLine();
+    }
+
+    /**
+     * Creates an object from the CSV fields by invoking the `createObjectFromFields` method.
+     * This assumes that the class T implements `HasId` and provides this static method.
+     *
+     * @param fields The fields from the CSV line.
+     * @return A new instance of T created from the fields, or null if creation fails.
+     */
+    private T createObjectFromFields(String[] fields) {
+        try {
+            // Assuming the class implements a static createObjectFromFields method
+            Method method = entityClass.getMethod("createObjectFromFields", String[].class);
+            return (T) method.invoke(null, (Object) fields); // Invoke the method using reflection
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

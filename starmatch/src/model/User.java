@@ -106,4 +106,34 @@ public class User extends Person {
                 '}';
     }
 
+
+    /**
+     * Converts this User object to a line for the text file.
+     *
+     * @return The CSV representation of the User.
+     */
+    @Override
+    public String convertObjectToLine() {
+        return this.id + "," + this.name + "," + this.email + "," + this.password + "," + this.birthDate + "," + this.birthTime + "," + this.birthPlace;
+    }
+
+    /**
+     * Creates a User object from the given fields in a text file line.
+     *
+     * @param fields The fields from the CSV line.
+     * @return A new User object created from the fields.
+     */
+
+    public static User createObjectFromFields(String[] fields) {
+        Integer id = Integer.valueOf(fields[0]);
+        String name = fields[1];
+        LocalDate birthDate = LocalDate.parse(fields[2]);
+        LocalTime time = LocalTime.parse(fields[3]);
+        String country = fields[4];
+        String email = fields[5];
+        String password = fields[6];
+
+        return new User(id, name, birthDate, time, country, email, password);
+    }
+
 }

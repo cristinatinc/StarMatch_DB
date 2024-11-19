@@ -90,4 +90,22 @@ public class Quote implements HasId {
                 ", quoteText='" + quoteText + '\'' +
                 '}';
     }
+
+    @Override
+    public String convertObjectToLine() {
+        return id + "," + element + "," + quoteText;
+    }
+
+    /**
+     * Creates a Quote object from a CSV line.
+     *
+     * @param fields the CSV fields to create the object
+     * @return the Quote object created from the fields
+     */
+    public static HasId createObjectFromFields(String[] fields) {
+        Integer id = Integer.parseInt(fields[0]);
+        Element element = Element.valueOf(fields[1]);
+        String quoteText = fields[2];
+        return new Quote(id, element, quoteText);
+    }
 }

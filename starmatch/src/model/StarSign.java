@@ -1,6 +1,8 @@
 package model;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents an astrological star sign with a unique ID, name, element, and associated traits.
@@ -113,5 +115,29 @@ public class StarSign implements HasId{
                 ", element=" + element +
                 ", traits=" + traits +
                 '}';
+    }
+
+    @Override
+    public String convertObjectToLine() {
+        String traitsString = traits.stream()
+                .map(Trait::getTraitName)
+                .collect(Collectors.joining(","));
+        return id + "," + starName + "," + element + "," + traitsString;
+    }
+
+    /**
+     * Creates a StarSign object from a CSV line.
+     *
+     * @param fields the CSV fields to create the object
+     * @return the StarSign object created from the fields
+     */
+    public static HasId createObjectFromFields(String[] fields) {
+        Integer id = Integer.parseInt(fields[0]);
+        String starName = fields[1];
+        Element element = Element.valueOf(fields[2]);
+        List<Trait> traits = List.of(fields[3].split(",")).stream()
+                .map(traitName -> new Trait(element, traitName, null))
+                .collect(Collectors.toList());
+        return new StarSign(starName, element, traits, id);
     }
 }

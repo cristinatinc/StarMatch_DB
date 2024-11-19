@@ -1,7 +1,9 @@
 import model.*;
+import repository.InFileRepository;
 import repository.InMemoryRepository;
 import repository.Repository;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -685,7 +687,7 @@ public class ConsoleApp {
     }
 
     /**
-     * Main function where the inMemoryRepositories are initialized and the application starts.
+     * Main function where the inMemoryRepositories, InFileRepositories are initialized and the application starts.
      */
     public static void main(String[] args) {
         Repository<User> userRepository = createInMemoryUserRepository();
@@ -696,9 +698,19 @@ public class ConsoleApp {
 
         StarMatchService starMatchService = new StarMatchService(userRepository, adminRepository,signRepository, quoteRepository, traitRepository);
         StarMatchController starMatchController = new StarMatchController(starMatchService);
-
         ConsoleApp consoleApp = new ConsoleApp(starMatchController);
-        consoleApp.start();
+//        consoleApp.start();
+
+        Repository<User> userFileRepo = new InFileRepository<User>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\users.txt", User.class);
+        Repository<Admin> adminFileRepo = new InFileRepository<Admin>("starmatch/src/files/admins.txt", Admin.class);
+        Repository<StarSign> starSignFileRepo = new InFileRepository<StarSign>("starmatch/src/files/starsigns.txt", StarSign.class);
+        Repository<Quote> quoteFileRepo = new InFileRepository<Quote>("starmatch/src/files/quotes.txt", Quote.class);
+        Repository<Trait> traitFileRepo = new InFileRepository<Trait>("starmatch/src/files/traits.txt", Trait.class);
+
+        StarMatchService starMatchServiceFile = new StarMatchService(userFileRepo, adminFileRepo, starSignFileRepo, quoteFileRepo, traitFileRepo);
+        StarMatchController starMatchControllerFile = new StarMatchController(starMatchServiceFile);
+        ConsoleApp consoleAppFile = new ConsoleApp(starMatchControllerFile);
+        consoleAppFile.start();
     }
 
     /**

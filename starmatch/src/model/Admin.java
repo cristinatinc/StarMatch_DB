@@ -112,4 +112,28 @@ public class Admin implements HasId{
                 ", password='" + password + '\'' +
                 '}';
     }
+
+    /**
+     * Converts the Admin object to a CSV line.
+     *
+     * @return the CSV representation of this Admin object.
+     */
+    @Override
+    public String convertObjectToLine() {
+        return id + "," + name + "," + email + "," + password;
+    }
+
+    /**
+     * Creates an Admin object from a CSV line.
+     *
+     * @param fields the CSV fields to create the object
+     * @return the Admin object created from the fields
+     */
+    public static HasId createObjectFromFields(String[] fields) {
+        int id = Integer.parseInt(fields[0]);
+        String name = fields[1];
+        String email = fields[2];
+        String password = fields[3];
+        return new Admin(id, name, email, password);
+    }
 }

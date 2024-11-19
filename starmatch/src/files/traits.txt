@@ -1,0 +1,12 @@
+Fire,passionate,1
+Fire,playful,2
+Fire,energized,3
+Water,emotional,4
+Water,intuitive,5
+Water,nurturing,6
+Air,adventurous,7
+Air,curious,8
+Air,sociable,9
+Earth,stable,10
+Earth,pragmatic,11
+Earth,analytic,12

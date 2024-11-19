@@ -4,7 +4,7 @@ package model;
  * Represents a planet with a unique ID, name, and associated astrological sign.
  * Implements the {@link HasId} interface to provide an ID getter.
  */
-public class Planet implements HasId{
+public class Planet {
     private Integer id;
     private StarSign sign;
     private String planetName;
@@ -63,7 +63,7 @@ public class Planet implements HasId{
      *
      * @return the ID of the planet
      */
-    @Override
+
     public Integer getId() {
         return id;
     }

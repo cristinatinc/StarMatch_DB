@@ -80,4 +80,27 @@ public class Trait implements HasId {
     public Integer getId() {
         return id;
     }
+
+    /**
+     * Converts the Trait object to a CSV line.
+     *
+     * @return the CSV representation of this Trait object.
+     */
+    @Override
+    public String convertObjectToLine() {
+        return id + "," + element + "," + traitName;
+    }
+
+    /**
+     * Creates a Trait object from a CSV line.
+     *
+     * @param fields the CSV fields to create the object
+     * @return the Trait object created from the fields
+     */
+    public static HasId createObjectFromFields(String[] fields) {
+        Integer id = Integer.parseInt(fields[0]);
+        Element element = Element.valueOf(fields[1]);
+        String traitName = fields[2];
+        return new Trait(element, traitName, id);
+    }
 }
