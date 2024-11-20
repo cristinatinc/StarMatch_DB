@@ -65,8 +65,8 @@ public class Trait implements HasId {
      */
     @Override
     public String toString() {
-        return "Trait{" +
-                "element=" + element +
+        return "Trait{id=" + id +
+                ", element=" + element +
                 ", traitName='" + traitName + '\'' +
                 '}';
     }
