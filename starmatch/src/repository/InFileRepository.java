@@ -100,7 +100,7 @@ public class InFileRepository<T extends HasId> implements Repository<T> {
                         data.put(id, obj);
 
                         if (obj instanceof User user) {
-                            allUsers.add(user); // Collect users for friend resolution
+                            allUsers.add(user);
                         }
                     }
                 } catch (Exception e) {

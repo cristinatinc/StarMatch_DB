@@ -106,7 +106,7 @@ public class ConsoleApp {
         String dateOfBirth = scanner.nextLine();
         System.out.print("Time of birth (HH:mm): ");
         String timeOfBirth = scanner.nextLine();
-        System.out.print("Place of birth: ");
+        System.out.print("City of birth: ");
         String placeOfBirth = scanner.nextLine();
 
         try{
@@ -538,7 +538,7 @@ public class ConsoleApp {
                 Birthtime:""" + user.getBirthTime() +
                 """
                 
-                Birthplace:""" + user.getBirthPlace() +
+                City of birth:""" + user.getBirthPlace() +
                 """
                 
                 Email:""" + user.getEmail() +
@@ -573,7 +573,7 @@ public class ConsoleApp {
         String birthTimeInput = scanner.nextLine();
         LocalTime birthTime = birthTimeInput.isBlank() ? null : LocalTime.parse(birthTimeInput);
 
-        System.out.print("New Birth Place (leave blank to keep current): ");
+        System.out.print("New Birth City (leave blank to keep current): ");
         String birthPlace = scanner.nextLine();
 
         try{
@@ -753,17 +753,17 @@ public class ConsoleApp {
         ConsoleApp consoleApp = new ConsoleApp(starMatchController);
 //        consoleApp.start();
 //
-//        Repository<User> userFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\users.txt", User.class);
-//        Repository<Admin> adminFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\admins.txt", Admin.class);
-//        Repository<StarSign> starSignFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\starsigns.txt", StarSign.class);
-//        Repository<Quote> quoteFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\quotes.txt", Quote.class);
-//        Repository<Trait> traitFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\traits.txt", Trait.class);
+        Repository<User> userFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\users.txt", User.class);
+        Repository<Admin> adminFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\admins.txt", Admin.class);
+        Repository<StarSign> starSignFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\starsigns.txt", StarSign.class);
+        Repository<Quote> quoteFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\quotes.txt", Quote.class);
+        Repository<Trait> traitFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\traits.txt", Trait.class);
 
-        Repository<User> userFileRepo = new InFileRepository<User>("C:\\Users\\andre\\IntelliJProjects\\Sem2\\StarMatch\\starmatch\\src\\files\\users.txt", User.class);
-        Repository<Admin> adminFileRepo = new InFileRepository<Admin>("C:\\Users\\andre\\IntelliJProjects\\Sem2\\StarMatch\\starmatch\\src\\files\\admins.txt", Admin.class);
-        Repository<StarSign> starSignFileRepo = new InFileRepository<StarSign>("C:\\Users\\andre\\IntelliJProjects\\Sem2\\StarMatch\\starmatch\\src\\files\\starsigns.txt", StarSign.class);
-        Repository<Quote> quoteFileRepo = new InFileRepository<Quote>("C:\\Users\\andre\\IntelliJProjects\\Sem2\\StarMatch\\starmatch\\src\\files\\quotes.txt", Quote.class);
-        Repository<Trait> traitFileRepo = new InFileRepository<Trait>("C:\\Users\\andre\\IntelliJProjects\\Sem2\\StarMatch\\starmatch\\src\\files\\traits.txt", Trait.class);
+//        Repository<User> userFileRepo = new InFileRepository<User>("C:\\Users\\andre\\IntelliJProjects\\Sem2\\StarMatch\\starmatch\\src\\files\\users.txt", User.class);
+//        Repository<Admin> adminFileRepo = new InFileRepository<Admin>("C:\\Users\\andre\\IntelliJProjects\\Sem2\\StarMatch\\starmatch\\src\\files\\admins.txt", Admin.class);
+//        Repository<StarSign> starSignFileRepo = new InFileRepository<StarSign>("C:\\Users\\andre\\IntelliJProjects\\Sem2\\StarMatch\\starmatch\\src\\files\\starsigns.txt", StarSign.class);
+//        Repository<Quote> quoteFileRepo = new InFileRepository<Quote>("C:\\Users\\andre\\IntelliJProjects\\Sem2\\StarMatch\\starmatch\\src\\files\\quotes.txt", Quote.class);
+//        Repository<Trait> traitFileRepo = new InFileRepository<Trait>("C:\\Users\\andre\\IntelliJProjects\\Sem2\\StarMatch\\starmatch\\src\\files\\traits.txt", Trait.class);
 
 
         StarMatchService starMatchServiceFile = new StarMatchService(userFileRepo, adminFileRepo, starSignFileRepo, quoteFileRepo, traitFileRepo);
@@ -777,10 +777,10 @@ public class ConsoleApp {
      */
     private static Repository<User> createInMemoryUserRepository() {
         Repository<User> userRepository = new InMemoryRepository<>();
-        userRepository.create(new User(1, "Amna", LocalDate.of(2000, 3, 12), LocalTime.of(9,0), "Romania", "amna@gmail.com", "parola"));
-        userRepository.create(new User(2, "Florian", LocalDate.of(2007, 7, 24), LocalTime.of(10,0), "Romania", "florinel@gmail.com", "0987"));
-        userRepository.create(new User(3, "Briana Gheorghe", LocalDate.of(2004, 1, 3), LocalTime.of(22,12), "USA", "brianaagheorghe@yahoo.com", "bribri"));
-        userRepository.create(new User(4, "sore marian", LocalDate.of(1990, 9, 10), LocalTime.of(6,23), "Germania", "soremarian@gmail.com", "sore1"));
+        userRepository.create(new User(1, "Amna", LocalDate.of(2000, 3, 12), LocalTime.of(9,0), "Cluj", "amna@gmail.com", "parola"));
+        userRepository.create(new User(2, "Florian", LocalDate.of(2007, 7, 24), LocalTime.of(10,0), "Cluj", "florinel@gmail.com", "0987"));
+        userRepository.create(new User(3, "Briana Gheorghe", LocalDate.of(2004, 1, 3), LocalTime.of(22,12), "Sibiu", "brianaagheorghe@yahoo.com", "bribri"));
+        userRepository.create(new User(4, "sore marian", LocalDate.of(1990, 9, 10), LocalTime.of(6,23), "Victoria", "soremarian@gmail.com", "sore1"));
         return userRepository;
     }
 
