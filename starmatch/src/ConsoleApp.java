@@ -672,6 +672,9 @@ public class ConsoleApp {
         try{
         starMatchController.addFriend(userEmail,friendEmail);
         System.out.println("Friend added!");}
+        catch (IllegalArgumentException f){
+            System.out.println(f.getMessage());
+        }
         catch (NoSuchElementException e){
             System.out.println(e.getMessage());
         }

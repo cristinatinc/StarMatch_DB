@@ -368,6 +368,8 @@ public class StarMatchService {
      * @throws NoSuchElementException if a user with the specified email does not exist
      */
     public void addFriend(User user, String friendEmail) {
+        if(user.getEmail().equals(friendEmail))
+            throw new IllegalArgumentException("You cannot add yourself as your friend");
         User friend = userRepository.getAll().stream()
                 .filter(user1 -> user1.getEmail().equals(friendEmail))
                 .findFirst()
