@@ -153,11 +153,22 @@ public class User extends Person {
         return user;
     }
 
-
+    /**
+     * Gets the raw list of friend emails.
+     * This list represents the emails of the user's friends, stored as raw data.
+     *
+     * @return the raw list of friend emails
+     */
     public List<String> getRawFriendEmails() {
         return rawFriendEmails;
     }
 
+    /**
+     * Sets the raw list of friend emails.
+     * This method sets the list of emails for the user's friends, which are stored as raw data.
+     *
+     * @param rawFriendEmails the new list of raw friend emails
+     */
     public void setRawFriendEmails(List<String> rawFriendEmails) {
         this.rawFriendEmails = new ArrayList<>(rawFriendEmails);
     }

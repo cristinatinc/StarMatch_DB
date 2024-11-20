@@ -117,6 +117,11 @@ public class StarSign implements HasId{
                 '}';
     }
 
+    /**
+     * Converts the Trait object to a CSV line.
+     *
+     * @return the CSV representation of this Trait object.
+     */
     @Override
     public String convertObjectToLine() {
         String traitsString = traits.stream()

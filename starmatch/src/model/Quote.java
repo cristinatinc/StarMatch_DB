@@ -91,6 +91,11 @@ public class Quote implements HasId {
                 '}';
     }
 
+    /**
+     * Converts the Trait object to a CSV line.
+     *
+     * @return the CSV representation of this Trait object.
+     */
     @Override
     public String convertObjectToLine() {
         return id + "," + element + "," + quoteText;
