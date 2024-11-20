@@ -231,7 +231,7 @@ public class StarMatchController {
     /**
      * Retrieves a user's friend list.
      */
-    public List<String> viewFriends(String userEmail){
+    public List<User> viewFriends(String userEmail){
         User user = starMatchService.getUserByEmail(userEmail);
         return starMatchService.getFriends(user);
     }

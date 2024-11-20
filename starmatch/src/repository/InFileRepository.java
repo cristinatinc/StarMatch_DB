@@ -4,6 +4,7 @@ import java.io.*;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import model.*;
 
@@ -82,10 +83,7 @@ public class InFileRepository<T extends HasId> implements Repository<T> {
         Map<Integer, T> data = new HashMap<>();
         File file = new File(filePath);
 
-        if (!file.exists() || file.length() == 0) {
-            // Return empty data if the file doesn't exist or is empty
-            return data;
-        }
+        if (!file.exists() || file.length() == 0) return data;
 
         List<User> allUsers = new ArrayList<>();
 
@@ -94,7 +92,6 @@ public class InFileRepository<T extends HasId> implements Repository<T> {
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(",");
                 if (fields.length == 0 || fields[0].isEmpty()) {
-                    System.err.println("Skipping invalid line: " + line);
                     continue;
                 }
 
@@ -103,25 +100,16 @@ public class InFileRepository<T extends HasId> implements Repository<T> {
                     T obj = createObjectFromFields(fields);
                     if (obj != null) {
                         data.put(id, obj);
-                    }
 
-                    if (obj instanceof User user) {
-                        allUsers.add(user);
+                        if (obj instanceof User user) {
+                            allUsers.add(user); // Collect users for friend resolution
+                        }
                     }
-
-                } catch (NumberFormatException e) {
-                    System.err.println("Invalid ID format in line: " + line);
                 } catch (Exception e) {
-                    System.err.println("Error creating object from fields: " + Arrays.toString(fields));
                     e.printStackTrace();
                 }
             }
-        } catch (IOException e) {
-            System.err.println("Error reading from file: " + filePath);
-            e.printStackTrace();
-        }
 
-        if (entityClass.getSimpleName().equals("User")) {
             for (User user : allUsers) {
                 List<User> resolvedFriends = user.getRawFriendEmails().stream()
                         .map(email -> allUsers.stream()
@@ -132,6 +120,8 @@ public class InFileRepository<T extends HasId> implements Repository<T> {
                         .toList();
                 user.setFriends(resolvedFriends);
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return data;

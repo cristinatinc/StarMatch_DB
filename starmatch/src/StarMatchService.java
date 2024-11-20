@@ -367,14 +367,14 @@ public class StarMatchService {
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("User with that email does not exist"));
 
-        if (!user.getFriends().contains(friend) && !user.getRawFriendEmails().contains(friendEmail)) {
-            user.getFriends().add(friend);
+        if (!user.getRawFriendEmails().contains(friendEmail)) {
             user.getRawFriendEmails().add(friendEmail);
+            user.getFriends().add(friend);
 
-            // Update the user in the repository to save changes
             userRepository.update(user);
         }
     }
+
 
     /**
      * Retrieves a list of a user's friends.
@@ -382,12 +382,21 @@ public class StarMatchService {
      * @param user the user whose friends are retrieved
      * @return a list of User objects representing the user's friends
      */
-    public List<String> getFriends(User user){
-//        refreshFriendsList(user);
-//        return user.getFriends();
-        return user.getRawFriendEmails();
+    public List<User> getFriends(User user) {
+        refreshFriendsList(user);
+        return user.getFriends();
     }
 
+    private void refreshFriendsList(User user) {
+        List<User> resolvedFriends = user.getRawFriendEmails().stream()
+                .map(email -> userRepository.getAll().stream()
+                        .filter(u -> u.getEmail().equals(email))
+                        .findFirst()
+                        .orElse(null))
+                .filter(Objects::nonNull)
+                .toList();
+        user.setFriends(resolvedFriends);
+    }
 
 
     /**
@@ -399,18 +408,19 @@ public class StarMatchService {
      */
     public void removeFriend(User user, String friendEmail) {
         User friend = userRepository.getAll().stream()
-                .filter(user1 -> user1.getEmail().equals(friendEmail))
+                .filter(u -> u.getEmail().equals(friendEmail))
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("User with that email does not exist"));
 
-        if (user.getFriends().contains(friend) && !user.getRawFriendEmails().contains(friendEmail)) {
-            user.getFriends().remove(friend);
+        if (user.getRawFriendEmails().contains(friendEmail)) {
             user.getRawFriendEmails().remove(friendEmail);
+            friend.getRawFriendEmails().remove(user.getEmail());
 
-            // Update the user in the repository to save changes
             userRepository.update(user);
+            userRepository.update(friend);
         }
     }
+
 
     /**
      * Calculates compatibility between a user and a friend.

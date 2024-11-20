@@ -644,16 +644,11 @@ public class ConsoleApp {
      */
     public void viewFriends(String userEmail) {
         System.out.println("Your friends:");
-        List<String> friends = starMatchController.viewFriends(userEmail);
-//        if(friends.isEmpty())
-//            System.out.println("No friends found.");
-//        else
-//            friends.forEach(friend -> System.out.println(friend.getName() + " (" + friend.getEmail() + ")"));
-
+        List<User> friends = starMatchController.viewFriends(userEmail);
         if(friends.isEmpty())
             System.out.println("No friends found.");
         else
-            friends.forEach(System.out::println);
+            friends.forEach(friend -> System.out.println(friend.getName() + " (" + friend.getEmail() + ")"));
     }
 
     /**

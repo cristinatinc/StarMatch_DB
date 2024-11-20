@@ -118,13 +118,11 @@ public class User extends Person {
      */
     @Override
     public String convertObjectToLine() {
-        String friendsEmails = friends.stream()
-                .map(User::getEmail)
-                .collect(Collectors.joining(","));
-
+        String rawFriendEmailsStr = String.join(",", rawFriendEmails); // Serialize raw friend emails
         return id + "," + name + "," + email + "," + password + "," + birthDate + "," +
-                birthTime + "," + birthPlace + "," + friendsEmails;
+                birthTime + "," + birthPlace + "," + rawFriendEmailsStr;
     }
+
 
 
     /**
@@ -146,8 +144,21 @@ public class User extends Person {
         User user = new User(id, name, birthDate, birthTime, birthPlace, email, password);
 
         if (fields.length > 7 && !fields[7].isEmpty()) {
+            // Split friend emails by commas and trim any extra spaces
             String[] friendEmails = fields[7].split(",");
-            user.setRawFriendEmails(new ArrayList<>(List.of(friendEmails))); // New field in `User` for temporary storage
+
+            // Ensure that the friends list is not null or empty, and trim spaces around emails
+//            List<String> trimmedFriendEmails = Arrays.stream(friendEmails)
+//                    .map(String::trim)  // Trim spaces around emails
+//                    .collect(Collectors.toList());
+
+            List<String> fe = Arrays.stream(fields, 7, fields.length)
+                    .map(String::trim) // Trim to avoid spacing issues
+                    .toList();
+
+
+            // Set the raw friend emails in the user
+            user.setRawFriendEmails(fe);
         }
 
         return user;
