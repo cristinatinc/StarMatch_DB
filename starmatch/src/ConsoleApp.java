@@ -3,7 +3,6 @@ import repository.InFileRepository;
 import repository.InMemoryRepository;
 import repository.Repository;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -436,7 +435,7 @@ public class ConsoleApp {
         String traitName = scanner.nextLine();
         System.out.print("Enter the element (Fire, Earth, Air, Water) that represents it: ");
         String traitElement = scanner.nextLine();
-        Element element = null;
+        Element element;
         try {
             element = Element.valueOf(traitElement);
         } catch (IllegalArgumentException e) {
@@ -701,11 +700,11 @@ public class ConsoleApp {
         ConsoleApp consoleApp = new ConsoleApp(starMatchController);
 //        consoleApp.start();
 
-        Repository<User> userFileRepo = new InFileRepository<User>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\users.txt", User.class);
-        Repository<Admin> adminFileRepo = new InFileRepository<Admin>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\admins.txt", Admin.class);
-        Repository<StarSign> starSignFileRepo = new InFileRepository<StarSign>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\starsigns.txt", StarSign.class);
-        Repository<Quote> quoteFileRepo = new InFileRepository<Quote>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\quotes.txt", Quote.class);
-        Repository<Trait> traitFileRepo = new InFileRepository<Trait>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\traits.txt", Trait.class);
+        Repository<User> userFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\users.txt", User.class);
+        Repository<Admin> adminFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\admins.txt", Admin.class);
+        Repository<StarSign> starSignFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\starsigns.txt", StarSign.class);
+        Repository<Quote> quoteFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\quotes.txt", Quote.class);
+        Repository<Trait> traitFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\traits.txt", Trait.class);
 
         StarMatchService starMatchServiceFile = new StarMatchService(userFileRepo, adminFileRepo, starSignFileRepo, quoteFileRepo, traitFileRepo);
         StarMatchController starMatchControllerFile = new StarMatchController(starMatchServiceFile);

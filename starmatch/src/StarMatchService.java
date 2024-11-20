@@ -472,9 +472,7 @@ public class StarMatchService {
             return true;
         if (userElement.equals(Element.Water) && friendElement.equals(Element.Earth))
             return true;
-        if (userElement.equals(Element.Earth) && friendElement.equals(Element.Water))
-            return true;
-        return false;
+        return userElement.equals(Element.Earth) && friendElement.equals(Element.Water);
     }
 
     /**
