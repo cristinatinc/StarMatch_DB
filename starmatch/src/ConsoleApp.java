@@ -524,8 +524,10 @@ public class ConsoleApp {
      */
     private void viewUserProfile(String userEmail) {
         User user=starMatchController.viewUserProfile(userEmail);
-        if(user == null)
+        if(user == null){
             System.out.println("Error: No user found with this email");
+        }
+        else{
         System.out.println("""
                 User Profile:
                 Name:""" + user.getName() + """
@@ -542,7 +544,7 @@ public class ConsoleApp {
                 Email:""" + user.getEmail() +
                 """
                 
-                Password:""" + user.getPassword());
+                Password:""" + user.getPassword());}
     }
 
     /**
