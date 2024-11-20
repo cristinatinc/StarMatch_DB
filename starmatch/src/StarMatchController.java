@@ -1,11 +1,9 @@
-import model.Compatibility;
-import model.Element;
-import model.NatalChart;
-import model.User;
+import model.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
@@ -205,11 +203,16 @@ public class StarMatchController {
      * throws exception if the email is invalid
      */
     public void updateUser(User user, String name, String email, String password, LocalDate birthDate, LocalTime birthTime, String birthPlace){
+        if(email!=null && !email.isEmpty()){
         if(starMatchService.validateEmail(email)){
         User user1=starMatchService.getUserByEmail(user.getEmail());
         starMatchService.updateUser(user1,name,email,password,birthDate,birthTime,birthPlace);}
         else
-            throw new NoSuchElementException("Invalid email");
+            throw new NoSuchElementException("Invalid email");}
+        else {
+            User user1=starMatchService.getUserByEmail(user.getEmail());
+            starMatchService.updateUser(user1,name,email,password,birthDate,birthTime,birthPlace);
+        }
     }
 
     /**
@@ -251,6 +254,33 @@ public class StarMatchController {
     public Compatibility getCompatibility(String userEmail, String friendEmail){
         User user = starMatchService.getUserByEmail(userEmail);
         return starMatchService.calculateCompatibility(user, friendEmail);
+    }
+
+    /**
+     *
+     * Uses the filter function from the service
+     * @return the filtered list of quotes
+     */
+    public List<Quote> filterQuotes(Element element){
+        return starMatchService.filterQuotesByElement(starMatchService.getQuotes(), element);
+    }
+
+    /**
+     *
+     * Uses the filter function from the service
+     * @return the filtered list of users
+     */
+    public List<User> filterUsers(int year){
+        return starMatchService.filterUsersByYear(starMatchService.getUsers(), year);
+    }
+
+    /**
+     *
+     * Uses the function from the service
+     * @return the map of the elements and the number of users which have that element
+     */
+    public Map<Element,Long> mostPopularElement(){
+        return starMatchService.mostPopularElements(starMatchService.getUsers());
     }
 
 }

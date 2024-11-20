@@ -5,9 +5,7 @@ import repository.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 
 public class ConsoleApp {
     private final StarMatchController starMatchController;
@@ -137,6 +135,7 @@ public class ConsoleApp {
                     5. View Personalized Quote
                     6. Manage Friends
                     7. Check Compatibility
+                    8. See The Most Popular Elements
                     
                     0. Log Out
                     """);
@@ -155,6 +154,7 @@ public class ConsoleApp {
                 case "5" -> viewPersonalizedQuote(userEmail);
                 case "6" -> manageFriendsMenu(scanner,userEmail);
                 case "7" -> viewCompatibility(scanner,userEmail);
+                case "8" -> viewMostPopularElement();
                 default -> System.out.println("Invalid option. Please try again.");
             }
         }
@@ -204,6 +204,7 @@ public class ConsoleApp {
                     -- Manage other Users --
                     1. View all users
                     2. Delete users
+                    3. Filter Users by Year
                     
                     0. Go back to admin menu
                     """);
@@ -214,6 +215,7 @@ public class ConsoleApp {
                 case "0" -> adminLoop = false;
                 case "1" -> starMatchController.viewUsers();
                 case "2" -> removeUsers(scanner);
+                case "3" -> filterUsers(scanner);
                 default -> System.out.println("Invalid option. Please try again.");
             }
         }
@@ -233,6 +235,18 @@ public class ConsoleApp {
     }
 
     /**
+     * The admin can now filter all the users of the app by the year in which they are born
+     * @param scanner The scanner instance to get admin input.
+     */
+    private void filterUsers(Scanner scanner) {
+        System.out.println("-- Filter Users --");
+        System.out.println("Enter the year: ");
+        int year = scanner.nextInt();
+        System.out.println("All users born in this year: ");
+        starMatchController.filterUsers(year).forEach(System.out::println);
+    }
+
+    /**
      * Provides the admin with options for managing quotes.
      * @param scanner The scanner instance to get admin input.
      */
@@ -245,6 +259,7 @@ public class ConsoleApp {
                     2. Add new quote
                     3. Delete quote
                     4. Update quote text
+                    5. Filter Quotes by Element
                     
                     0. Go back to admin menu
                     """);
@@ -257,6 +272,7 @@ public class ConsoleApp {
                 case "2" -> addNewQuote(scanner);
                 case "3" -> removeQuote(scanner);
                 case "4" -> updateQuote(scanner);
+                case "5" -> filterQuotes(scanner);
                 default -> System.out.println("Invalid option. Please try again.");
             }
         }
@@ -302,6 +318,26 @@ public class ConsoleApp {
         String quoteText = scanner.nextLine();
 
         starMatchController.updateQuote(Integer.valueOf(quoteID), quoteText);
+    }
+
+    /**
+     * The admin can choose an element and get just the quotes that correspond to that element
+     * @param scanner The scanner instance to get admin input.
+     */
+    private void filterQuotes(Scanner scanner){
+        System.out.println("-- Filter Quotes --");
+        System.out.println("Enter the element: ");
+        String element = scanner.nextLine();
+        Element elem = null;
+        if(Objects.equals(element, "Fire"))
+            elem = Element.Fire;
+        if(Objects.equals(element, "Water"))
+            elem = Element.Water;
+        if (Objects.equals(element, "Earth"))
+            elem = Element.Earth;
+        if(Objects.equals(element, "Air"))
+            elem = Element.Air;
+        starMatchController.filterQuotes(elem).forEach(System.out::println);
     }
 
     /**
@@ -488,6 +524,8 @@ public class ConsoleApp {
      */
     private void viewUserProfile(String userEmail) {
         User user=starMatchController.viewUserProfile(userEmail);
+        if(user == null)
+            System.out.println("Error: No user found with this email");
         System.out.println("""
                 User Profile:
                 Name:""" + user.getName() + """
@@ -686,6 +724,16 @@ public class ConsoleApp {
     }
 
     /**
+     * A user can view which elements are the most frequent from all the data in the app
+     *
+     */
+    private void viewMostPopularElement(){
+        Map<Element,Long> popularElements = starMatchController.mostPopularElement();
+        System.out.println("Most popular elements:");
+        popularElements.forEach((element,count)-> System.out.println(element + ": " + count + " users"));
+    }
+
+    /**
      * Main function where the inMemoryRepositories, InFileRepositories are initialized and the application starts.
      */
     public static void main(String[] args) {
@@ -699,12 +747,19 @@ public class ConsoleApp {
         StarMatchController starMatchController = new StarMatchController(starMatchService);
         ConsoleApp consoleApp = new ConsoleApp(starMatchController);
 //        consoleApp.start();
+//
+//        Repository<User> userFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\users.txt", User.class);
+//        Repository<Admin> adminFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\admins.txt", Admin.class);
+//        Repository<StarSign> starSignFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\starsigns.txt", StarSign.class);
+//        Repository<Quote> quoteFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\quotes.txt", Quote.class);
+//        Repository<Trait> traitFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\traits.txt", Trait.class);
 
-        Repository<User> userFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\users.txt", User.class);
-        Repository<Admin> adminFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\admins.txt", Admin.class);
-        Repository<StarSign> starSignFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\starsigns.txt", StarSign.class);
-        Repository<Quote> quoteFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\quotes.txt", Quote.class);
-        Repository<Trait> traitFileRepo = new InFileRepository<>("C:\\Users\\Cristina\\IdeaProjects\\StarMatch\\starmatch\\src\\files\\traits.txt", Trait.class);
+        Repository<User> userFileRepo = new InFileRepository<User>("C:\\Users\\andre\\IntelliJProjects\\Sem2\\StarMatch\\starmatch\\src\\files\\users.txt", User.class);
+        Repository<Admin> adminFileRepo = new InFileRepository<Admin>("C:\\Users\\andre\\IntelliJProjects\\Sem2\\StarMatch\\starmatch\\src\\files\\admins.txt", Admin.class);
+        Repository<StarSign> starSignFileRepo = new InFileRepository<StarSign>("C:\\Users\\andre\\IntelliJProjects\\Sem2\\StarMatch\\starmatch\\src\\files\\starsigns.txt", StarSign.class);
+        Repository<Quote> quoteFileRepo = new InFileRepository<Quote>("C:\\Users\\andre\\IntelliJProjects\\Sem2\\StarMatch\\starmatch\\src\\files\\quotes.txt", Quote.class);
+        Repository<Trait> traitFileRepo = new InFileRepository<Trait>("C:\\Users\\andre\\IntelliJProjects\\Sem2\\StarMatch\\starmatch\\src\\files\\traits.txt", Trait.class);
+
 
         StarMatchService starMatchServiceFile = new StarMatchService(userFileRepo, adminFileRepo, starSignFileRepo, quoteFileRepo, traitFileRepo);
         StarMatchController starMatchControllerFile = new StarMatchController(starMatchServiceFile);

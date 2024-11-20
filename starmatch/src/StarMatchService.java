@@ -175,7 +175,10 @@ public class StarMatchService {
      *
      * @return a list of all User objects
      */
-    public List<User> getUsers() { return userRepository.getAll();}
+    public List<User> getUsers() {
+        List<User> users = userRepository.getAll();
+        sortUsersByBirthdate(users);
+        return users;}
 
     /**
      * Retrieves a list of all quotes.
@@ -189,7 +192,10 @@ public class StarMatchService {
      *
      * @return a list of all Trait objects
      */
-    public List<Trait> getTraits(){ return traitRepository.getAll();}
+    public List<Trait> getTraits(){
+        List<Trait> traits = traitRepository.getAll();
+        sortTraitsByElement(traits);
+        return traits;}
 
     /**
      * Retrieves a user by their email address.
@@ -517,4 +523,81 @@ public class StarMatchService {
         return email != null && email.matches(emailValid);
     }
 
+    /**
+     * Sorts the users by their birth date in ascending order.
+     * If the provided list is null or empty, it returns an empty list.
+     *
+     * @param users the list of users to be sorted
+     * @return a list of users sorted by their birth date, or an empty list if input is null or empty
+     */
+    public List<User> sortUsersByBirthdate(List<User> users){
+        if(users == null || users.isEmpty())
+            return Collections.emptyList();
+        users.sort(Comparator.comparing(User::getBirthDate));
+        return users;
+    }
+
+    /**
+     * Sorts the traits by their associated element in the order of
+     * Air, Earth, Fire, and Water.
+     * If the provided list is null or empty, it returns an empty list.
+     *
+     * @param traits the list of personality traits to be sorted
+     * @return a list of personality traits sorted by their element, or an empty list if input is null or empty
+     */
+    public List<Trait> sortTraitsByElement(List<Trait> traits){
+        if(traits == null || traits.isEmpty())
+            return Collections.emptyList();
+        List<Element> elementOrder = List.of(Element.Air,Element.Earth,Element.Fire,Element.Water);
+        traits.sort(Comparator.comparing(trait -> elementOrder.indexOf(trait.getElement())));
+        return traits;
+    }
+
+    /**
+     * Filters the users to only include those who were born in a specific year.
+     * If the provided list is null or empty, or no users match the year, it returns an empty list.
+     *
+     * @param users the list of users to filter
+     * @param year the year to filter users by
+     * @return a list of users born in the specified year, or an empty list if input is null, empty, or no users match the year
+     */
+    public List<User> filterUsersByYear(List<User> users, int year){
+        if(users == null || users.isEmpty())
+            return Collections.emptyList();
+        return users.stream().filter(user -> user.getBirthDate().getYear() == year).collect(Collectors.toList());
+    }
+
+    /**
+     * Filters the quotes to only include those associated with a specific element.
+     * If the provided list is null or empty, or no quotes match the element, it returns an empty list.
+     *
+     * @param quotes the list of quotes to filter
+     * @param element the element to filter quotes by
+     * @return a list of quotes associated with the specified element, or an empty list if input is null, empty, or no quotes match the element
+     */
+    public List<Quote> filterQuotesByElement(List<Quote> quotes, Element element){
+        if(quotes == null || quotes.isEmpty() || element == null)
+            return Collections.emptyList();
+        return quotes.stream().filter(quote -> quote.getElement().equals(element)).collect(Collectors.toList());
+    }
+
+
+    /**
+     * Calculates the most popular elements among users based on their sun signs.
+     * This method counts the occurrences of each element (Air, Earth, Fire, Water) in the users' sun signs
+     * and returns a map of the elements sorted by their popularity in descending order.
+     * If the provided list of users is null or empty, it returns an empty map.
+     *
+     * @param users the list of users to analyze
+     * @return a map of elements with their count, sorted by the most popular element, or an empty map if input is null or empty
+     */
+    public Map<Element,Long> mostPopularElements(List<User> users){
+        if(users == null || users.isEmpty())
+            return Collections.emptyMap();
+        return users.stream().map(user -> calculateSunSign(user.getBirthDate())).filter(Objects::nonNull).map(StarSign::getElement).
+                collect(Collectors.groupingBy(element -> element,Collectors.counting())).entrySet().
+                stream().sorted(Map.Entry.<Element, Long>comparingByValue().reversed()).
+                collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue,(e1,e2)->e1,LinkedHashMap::new));
+
+    }
 }
