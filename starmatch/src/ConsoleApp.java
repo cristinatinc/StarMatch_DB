@@ -634,6 +634,7 @@ public class ConsoleApp {
                     2. Add friend
                     3. View all friends
                     4. Remove friend
+                    5. View users near me
                     
                     0.Go back to user dashboard
                     """);
@@ -645,9 +646,16 @@ public class ConsoleApp {
                 case "2" -> addFriend(scanner,userEmail);
                 case "3" -> viewFriends(userEmail);
                 case "4" -> removeFriend(scanner,userEmail);
+                case "5" -> viewFriendsNearMe(userEmail);
                 default -> System.out.println("Invalid option. Please try again.");
             }
         }
+    }
+
+    private void viewFriendsNearMe(String userEmail) {
+        System.out.println("-- Users from the city I was born in --");
+        List<User> friendsNear = starMatchController.getFriendsNearMe(userEmail);
+        friendsNear.forEach(friend -> System.out.println(friend.getName() + " is also born in " + friend.getBirthPlace()));
     }
 
     /**

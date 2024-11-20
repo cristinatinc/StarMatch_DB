@@ -283,4 +283,8 @@ public class StarMatchController {
         return starMatchService.mostPopularElements(starMatchService.getUsers());
     }
 
+    public List<User> getFriendsNearMe(String userEmail) {
+        User user = starMatchService.getUserByEmail(userEmail);
+        return starMatchService.getFriendsNearMe(user);
+    }
 }

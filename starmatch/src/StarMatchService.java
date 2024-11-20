@@ -602,4 +602,10 @@ public class StarMatchService {
                 collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue,(e1,e2)->e1,LinkedHashMap::new));
 
     }
+
+    public List<User> getFriendsNearMe(User user) {
+        ArrayList<User> usersNearMe = new ArrayList<>( userRepository.getAll().stream().filter(user1 -> user1.getBirthPlace().equals(user.getBirthPlace())).toList());
+        usersNearMe.removeIf(u -> u.getEmail().equals(user.getEmail()));
+        return usersNearMe;
+    }
 }
